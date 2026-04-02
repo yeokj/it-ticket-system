@@ -1,60 +1,60 @@
-#include "Incident.h"
+#include "Ticket.h"
 #include <string>
 using namespace std;
 
 // Default constructor initializes all members to default values
-Incident::Incident() : ticket(-1), client("No Client"), technician("No Technician"), issue("No Issue"), deadline(-1), priority(0) {}
+Ticket::Ticket() : ticket(-1), client("No Client"), technician("No Technician"), issue("No Issue"), deadline(-1), priority(0) {}
 
 // Parameterized constructor initializes members with provided values
-Incident::Incident(int ticketNum, string clientInfo, string techSupport, string issue, int dueDate)
+Ticket::Ticket(int ticketNum, string clientInfo, string techSupport, string issue, int dueDate)
          :  ticket(ticketNum), client(clientInfo), technician(techSupport), issue(issue), deadline(dueDate), priority(0) {};
 
-void Incident::SetTicketNum(int ticketNum) {
+void Ticket::SetTicketNum(int ticketNum) {
     ticket = ticketNum;
 }
 
-int Incident::GetTicketNum() const {
+int Ticket::GetTicketNum() const {
     return ticket;
 }
 
-void Incident::SetClientInfo(string clientInfo) {
+void Ticket::SetClientInfo(string clientInfo) {
     client = clientInfo;
 }
 
-string Incident::GetClientInfo() const {
+string Ticket::GetClientInfo() const {
     return client;
 }
 
-void Incident::SetTechSupport(string techSupport) {
+void Ticket::SetTechSupport(string techSupport) {
     technician = techSupport;
 }
 
-string Incident::GetTechSupport() const {
+string Ticket::GetTechSupport() const {
     return technician;
 }
 
-void Incident::SetIssue(string issue) {
+void Ticket::SetIssue(string issue) {
     this->issue = issue;
 }
 
-string Incident::GetIssue() const {
+string Ticket::GetIssue() const {
     return issue;
 }
 
-void Incident::SetDueDate(int dueDate) {
+void Ticket::SetDueDate(int dueDate) {
     deadline = dueDate;
     SetPriority(GetPriority()); // Automatically updates priority based on due date
 }
 
-int Incident::GetDueDate() const {
+int Ticket::GetDueDate() const {
     return deadline;
 }
 
-void Incident::SetPriority(int priorityLevel) {
+void Ticket::SetPriority(int priorityLevel) {
     priority = priorityLevel;
 }
 // Determines the priority level based on the due date
-int Incident::GetPriority() const {
+int Ticket::GetPriority() const {
     if (deadline <= 1) {
         return 1;
     } else if (deadline > 1 && deadline <= 7) {
@@ -66,7 +66,7 @@ int Incident::GetPriority() const {
     }
 }
 
-void Incident::Display() const {
+void Ticket::Display() const {
     cout << "\nTicket number: " << ticket << endl;
     cout << "Client Name: " << client << endl;
     cout << "Technician Assigned: " << technician << endl;

@@ -1,5 +1,5 @@
-#include "IncidentFunctions.h"
-#include "Incident.h"
+#include "TicketService.h"
+#include "Ticket.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -7,60 +7,60 @@
 using namespace std;
 
 // Function to append a new ticket to the incident list
-void appendTicket(vector<Incident>& incidents) {
-    Incident incident;
+void appendTicket(vector<Ticket>& tickets) {
+    Ticket ticket;
     int ticketNum = rand() % 100;
     string clientInfo, techSupport, issue;
     int dueDate;
     int folderNum;
 
-    incident.SetTicketNum(ticketNum);
+    ticket.SetTicketNum(ticketNum);
     cout << "\nTicket number: " << ticketNum << endl;
 
     // Input client, technician, and issue information
     cout << "What is the client's name? ";
     cin.ignore();
     getline(cin, clientInfo);
-    incident.SetClientInfo(clientInfo);
+    ticket.SetClientInfo(clientInfo);
 
     cout << "What is your name? ";
     getline(cin, techSupport);
-    incident.SetTechSupport(techSupport);
+    ticket.SetTechSupport(techSupport);
 
     cout << "What is the issue? ";
     cin >> issue;
-    incident.SetIssue(issue);
+    ticket.SetIssue(issue);
 
     // Generate a random due date (1 to 31 days)
     dueDate = rand() % 31 + 1;
-    incident.SetDueDate(dueDate);
+    ticket.SetDueDate(dueDate);
     cout << "We will fix it in " << dueDate << " days." << endl;
 
     // Display priority based on due date
-    cout << "Priority: " << incident.GetPriority() << endl;
+    cout << "Priority: " << ticket.GetPriority() << endl;
 
-    incidents.push_back(incident);
+    tickets.push_back(ticket);
     cout << "\nIncident Successfully Added Successfully!" << endl;
 }
 
 // Function to create a new incident at a specified position
-void createIncident(vector<Incident>& incidents) {
-    Incident incident;
+void createTicket(vector<Ticket>& tickets) {
+    Ticket ticket;
     int ticketNum = rand() % 100;
     string clientInfo, techSupport, issue;
     int dueDate;
     int index = 0;
 
-    incident.SetTicketNum(ticketNum);
+    ticket.SetTicketNum(ticketNum);
     cout << "\nTicket number: " << ticketNum << endl;
 
     // Ask for the index at which to insert the incident
-    if (!incidents.empty()) {
-        cout << "\nEnter the index number where you want to add this incident (0 to " << incidents.size() << "): ";
+    if (!tickets.empty()) {
+        cout << "\nEnter the index number where you want to add this incident (0 to " << tickets.size() << "): ";
         cin >> index;
 
-        if (index < 0 || index > incidents.size()) {
-            cout << "\nInvalid index number. Must be between 0 and " << incidents.size() << "." << endl;
+        if (index < 0 || index > tickets.size()) {
+            cout << "\nInvalid index number. Must be between 0 and " << tickets.size() << "." << endl;
             return;
         }
     } else {
@@ -71,31 +71,31 @@ void createIncident(vector<Incident>& incidents) {
     // Input client, technician, and issue information
     cout << "\nWhat is the client's name? ";
     cin >> clientInfo;
-    incident.SetClientInfo(clientInfo);
+    ticket.SetClientInfo(clientInfo);
 
     cout << "What is your name? ";
     cin >> techSupport;
-    incident.SetTechSupport(techSupport);
+    ticket.SetTechSupport(techSupport);
 
     cout << "What is the issue? ";
     cin >> issue;
-    incident.SetIssue(issue);
+    ticket.SetIssue(issue);
 
     // Generate a random due date
     dueDate = rand() % 31 + 1;
-    incident.SetDueDate(dueDate);
+    ticket.SetDueDate(dueDate);
     cout << "We will fix it in " << dueDate << " days." << endl;
 
-    cout << "Priority: " << incident.GetPriority() << endl;
+    cout << "Priority: " << ticket.GetPriority() << endl;
 
     // Insert the incident at the specified index
-    incidents.insert(incidents.begin() + index, incident);
+    tickets.insert(tickets.begin() + index, ticket);
     cout << "\nIncident Successfully Added at position " << index << "!" << endl;
 }
 
 // Function to remove an incident by ticket number
-void removeIncident(vector<Incident>& incidents) {
-    if (incidents.empty()) {
+void removeTicket(vector<Ticket>& tickets) {
+    if (tickets.empty()) {
         cout << "\nNo incidents to delete." << endl;
         return;
     }
@@ -105,13 +105,13 @@ void removeIncident(vector<Incident>& incidents) {
     cin >> ticketNum;
 
     bool found = false;
-    for (auto it = incidents.begin(); it != incidents.end(); ++it) {
+    for (auto it = tickets.begin(); it != tickets.end(); ++it) {
         if (it->GetTicketNum() == ticketNum) {
             // Display incident before deletion for debugging
             cout << "\nDeleting incident with ticket number: " << ticketNum << endl;
             it->Display();
 
-            incidents.erase(it); // Erase the incident
+            tickets.erase(it); // Erase the incident
             cout << "\nIncident with ticket number " << ticketNum << " has been deleted." << endl;
             found = true;
             break;
@@ -124,9 +124,9 @@ void removeIncident(vector<Incident>& incidents) {
 }
 
 // Function to display incidents in reverse order of priority
-void reverseIncident(vector<Incident>& incidents) {
-    Incident incident;
-    if (incidents.empty()) {
+void reverseTicket(vector<Ticket>& tickets) {
+    Ticket ticket;
+    if (tickets.empty()) {
         cout << "\nNo incidents to reverse." << endl;
         return;
     }
@@ -134,53 +134,53 @@ void reverseIncident(vector<Incident>& incidents) {
     cout << "\nShowing Incidents in reverse priority order." << endl;
 
     // Iterate through the incidents in reverse order
-    for (int i = incidents.size() - 1; i >= 0; i--) {
-       incidents[i].Display();
+    for (int i = tickets.size() - 1; i >= 0; i--) {
+       tickets[i].Display();
     }
     cout << endl;
 }
 
 // Function to sort incidents by priority
-void sortIncident(vector<Incident>& incidents) {
-    if (incidents.empty()) {
+void sortTicket(vector<Ticket>& tickets) {
+    if (tickets.empty()) {
         cout << "\nNo incidents to sort." << endl;
         return;
     }
 
     // Sort incidents based on priority (highest first)
-    for (int i = 0; i < incidents.size() - 1; i++) {
-        for (int j = 0; j < incidents.size() - i - 1; j++) {
-            if (incidents[j].GetPriority() < incidents[j + 1].GetPriority()) {
+    for (int i = 0; i < tickets.size() - 1; i++) {
+        for (int j = 0; j < tickets.size() - i - 1; j++) {
+            if (tickets[j].GetPriority() < tickets[j + 1].GetPriority()) {
                 // Swap incidents[j] and incidents[j + 1]
-                Incident temp = incidents[j];
-                incidents[j] = incidents[j + 1];
-                incidents[j + 1] = temp;
+                Ticket temp = tickets[j];
+                tickets[j] = tickets[j + 1];
+                tickets[j + 1] = temp;
             }
         }
     }
 
     cout << "\nIncident List (Top Priority First):" << endl;
     int index=1;
-    for (const auto& incident : incidents) {
+    for (const auto& ticket : tickets) {
         cout << "\n" << index << ")" << endl;
-        incident.Display();
+        ticket.Display();
         index++;
     }
 }
 // Function to search for an incident by ticket number
-void searchIncident(vector<Incident>& incidents){
-    Incident incident;
+void searchTicket(vector<Ticket>& tickets){
+    Ticket ticket;
     int ticketNum;
 
     cout << "Find your ticket via our Ticket Search Engine:" << endl;
     cin >> ticketNum;
 
-    if (incidents.empty()) {
+    if (tickets.empty()) {
         cout << "\nNo incidents to search." << endl;
         return;
     }
 
-    for (auto i = incidents.begin(); i != incidents.end(); i++) {
+    for (auto i = tickets.begin(); i != tickets.end(); i++) {
         if (ticketNum == i->GetTicketNum()) {
              i->Display();
             return;
@@ -189,11 +189,11 @@ void searchIncident(vector<Incident>& incidents){
     cout << "\nNo ticket found."<< endl;
 }
 // Function to filter incidents by priority level (highest or lowest)
-void priorityIncident(vector<Incident>& incidents) {
+void priorityTicket(vector<Ticket>& tickets) {
     int index=1;
     string choice;
 
-    if (incidents.empty()) {
+    if (tickets.empty()) {
         cout << "\nThere are no incidents." << endl;
         return;
     }
@@ -208,7 +208,7 @@ void priorityIncident(vector<Incident>& incidents) {
 
     if (choice == "highest") {
         // Display incidents with the highest priority (priority = 1)
-        for (auto i = incidents.begin(); i != incidents.end(); i++) {
+        for (auto i = tickets.begin(); i != tickets.end(); i++) {
             if (i->GetPriority() == 1) {
                 cout << "\n" << index << ")" << endl;
                 i->Display();
@@ -217,7 +217,7 @@ void priorityIncident(vector<Incident>& incidents) {
         }
     } else if (choice == "lowest") {
         // Display incidents with the lowest priority (priority = 4)
-        for (auto i = incidents.begin(); i != incidents.end(); i++) {
+        for (auto i = tickets.begin(); i != tickets.end(); i++) {
             if (i->GetPriority() == 4) {
                 cout << "\n" << index << ")" << endl;
                 i->Display();
@@ -232,24 +232,24 @@ void priorityIncident(vector<Incident>& incidents) {
 }
 
 // Function to display all incidents
-void displayAllIncidents(const vector<Incident>& incidents) {
+void displayAllTickets(const vector<Ticket>& tickets) {
 
-    if (incidents.empty()) {
+    if (tickets.empty()) {
         cout << "\nNo incidents to display." << endl;
         return;
     }
     int i = 1;
-    for (const auto& incident : incidents) {
+    for (const auto& ticket : tickets) {
         cout << i << ")\n";
-        incident.Display();
+        ticket.Display();
         cout << endl;
         i++;
         }
 }
 
 // Function to update an incident's due date or technician
-void updateIncident(vector<Incident>& incidents) {
-    if (incidents.empty()) {
+void updateTicket(vector<Ticket>& tickets) {
+    if (tickets.empty()) {
         cout << "\nNo incidents to update." << endl;
         return;
     }
@@ -259,10 +259,10 @@ void updateIncident(vector<Incident>& incidents) {
     cin >> ticketNum;
 
     bool found = false;
-    for (auto& incident : incidents) {
-        if (incident.GetTicketNum() == ticketNum) {
+    for (auto& ticket : tickets) {
+        if (ticket.GetTicketNum() == ticketNum) {
             found = true;
-            incident.Display();
+            ticket.Display();
 
             int choice;
             cout << "\nWhat would you like to update?" << endl;
@@ -275,19 +275,19 @@ void updateIncident(vector<Incident>& incidents) {
                 int newDueDate;
                 cout << "\nEnter new due date: ";
                 cin >> newDueDate;
-                incident.SetDueDate(newDueDate);
+                ticket.SetDueDate(newDueDate);
                 cout << "\nDue date updated successfully." << endl;
             } else if (choice == 2) {
                 string newTechnician;
                 cout << "\nEnter new technician name: ";
                 cin.ignore(); // Clear input buffer
                 getline(cin, newTechnician);
-                incident.SetTechSupport(newTechnician);
+                ticket.SetTechSupport(newTechnician);
                 cout << "\nTechnician updated successfully." << endl;
             } else {
                 cout << "\nInvalid choice. Update canceled." << endl;
             }
-            incident.Display();
+            ticket.Display();
             break;
         }
     }
@@ -297,9 +297,9 @@ void updateIncident(vector<Incident>& incidents) {
     }
 }
 // Function to filter incidents based on a specific priority
-void filterIncident(const vector<Incident>& incidents) {
+void filterTicket(const vector<Ticket>& tickets) {
     int index=1;
-    if (incidents.empty()) {
+    if (tickets.empty()) {
         cout << "\nNo incidents available to filter." << endl;
         return;
     }
@@ -308,18 +308,18 @@ void filterIncident(const vector<Incident>& incidents) {
     cout << "\nEnter the priority level to filter incidents (1 - Low, 2 - Mid, 3 - High, 4 - Highest): ";
     cin >> filterPriority;
 
-    vector<Incident> filteredIncidents;
-    for (const auto& incident : incidents) {
-        if (incident.GetPriority() == filterPriority) {
-            filteredIncidents.push_back(incident);
+    vector<Ticket> filteredTickets;
+    for (const auto& ticket : tickets) {
+        if (ticket.GetPriority() == filterPriority) {
+            filteredTickets.push_back(ticket);
         }
     }
 
-    if (!filteredIncidents.empty()) {
+    if (!filteredTickets.empty()) {
         cout << "\nFiltered Incidents with Priority Level " << filterPriority << ":" << endl;
-        for (const auto& incident : filteredIncidents) {
+        for (const auto& ticket : filteredTickets) {
             cout << "\n" << index << ")" << endl;
-            incident.Display();
+            ticket.Display();
             cout << endl;
             index++;
         }

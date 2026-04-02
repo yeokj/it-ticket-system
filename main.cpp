@@ -7,14 +7,14 @@
 #include <vector>
 #include <ctime>
 #include <algorithm>
-#include "Incident.h"
-#include "IncidentFunctions.h"
+#include "Ticket.h"
+#include "TicketService.h"
 
 using namespace std;
 
 int main () {
 
-    vector<Incident> incidents; // Stores all incident tickets
+    vector<Ticket> tickets; // Stores all incident tickets
     srand(time(0)); // Initialize random seed for generating ticket numbers
     int ticketNum = rand() % 100;
     string clientInfo;
@@ -26,12 +26,12 @@ int main () {
     string password;
 
     // Sample incidents for testing purposes
-    incidents.push_back(Incident(1, "John Doe", "Jane Smith", "System Crash", 1));  // Priority 1
-    incidents.push_back(Incident(2, "Alice Brown", "Tom Johnson", "Network Issue", 5)); // Priority 2
-    incidents.push_back(Incident(3, "Mike Davis", "Emma Wilson", "Software Bug", 8));  // Priority 3
-    incidents.push_back(Incident(4, "Sara Connor", "Kyle Reese", "Hardware Failure", 12)); // Priority 3
-    incidents.push_back(Incident(5, "Bruce Wayne", "Alfred Pennyworth", "Power Outage", 15)); // Priority 4
-    incidents.push_back(Incident(6, "Clark Kent", "Lois Lane", "Login Failure", 20)); // Priority 4
+    tickets.push_back(Ticket(1, "John Doe", "Jane Smith", "System Crash", 1));  // Priority 1
+    tickets.push_back(Ticket(2, "Alice Brown", "Tom Johnson", "Network Issue", 5)); // Priority 2
+    tickets.push_back(Ticket(3, "Mike Davis", "Emma Wilson", "Software Bug", 8));  // Priority 3
+    tickets.push_back(Ticket(4, "Sara Connor", "Kyle Reese", "Hardware Failure", 12)); // Priority 3
+    tickets.push_back(Ticket(5, "Bruce Wayne", "Alfred Pennyworth", "Power Outage", 15)); // Priority 4
+    tickets.push_back(Ticket(6, "Clark Kent", "Lois Lane", "Login Failure", 20)); // Priority 4
 
     cout << "Welcome to York College Incident Management" << endl;
 
@@ -81,34 +81,34 @@ int main () {
                 cout << "Exiting program. Thank you!" << endl;
                 return 0;
             case 1:
-                appendTicket(incidents); // fatima because create and append are same
+                appendTicket(tickets); // fatima because create and append are same
                 break;
             case 2:
-                createIncident(incidents); // fatima
+                createTicket(tickets); // fatima
                 break;
             case 3:
-                removeIncident(incidents); // daiwe
+                removeTicket(tickets); // daiwe
                 break;
             case 4:
-                sortIncident(incidents); // kyame
+                sortTicket(tickets); // kyame
                 break;
             case 5:
-                searchIncident(incidents); // kyame
+                searchTicket(tickets); // kyame
                 break;
             case 6:
-                priorityIncident(incidents); // daiwe
+                priorityTicket(tickets); // daiwe
                 break;
             case 7:
-                reverseIncident(incidents); //kyame
+                reverseTicket(tickets); //kyame
                 break;
             case 8:
-                displayAllIncidents(incidents); // daiwe
+                displayAllTickets(tickets); // daiwe
                 break;
             case 9:
-                updateIncident(incidents); // fatima
+                updateTicket(tickets); // fatima
                 break;
             case 10:
-                filterIncident(incidents); // fatima
+                filterTicket(tickets); // fatima
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;

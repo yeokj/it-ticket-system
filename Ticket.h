@@ -1,16 +1,16 @@
-#ifndef INCIDENT_H
-#define INCIDENT_H
+#ifndef TICKET_H
+#define TICKET_H
 
 #include <iostream>
 #include <string>
 using namespace std;
 
 // Class to represent an incident ticket (created by Kyame)
-class Incident {
+class Ticket {
 public:
 //constructor
-    Incident();
-    Incident(int ticketNum, string clientInfo, string techSupport, string issue, int dueDate);
+    Ticket();
+    Ticket(int ticketNum, string clientInfo, string techSupport, string issue, int dueDate);
 //setters and getters
     void SetTicketNum(int ticketNum);
     int GetTicketNum() const;

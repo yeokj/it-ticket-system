@@ -1,1 +1,1 @@
-# it-ticket-system
+# IT Ticket Management System
