@@ -12,37 +12,41 @@ public:
             const std::string &clientName, 
             const std::string &technicianName, 
             const std::string &issueDescription, 
-            int dueDate,
+            const std::string &dueDate,
             int priorityLevel);
 
     // Setters and Getters
-    void SetTicketNum(int ticketNum);
-    int GetTicketNum() const;
+    void setTicketId(int ticketId);
+    int getTicketId() const;
 
-    void SetClient(std::string clientInfo);
-    std::string GetClientInfo() const;
+    void setClientName(const std::string &clientName);
+    const std::string &getClientName() const;
 
-    void SetTechSupport(std::string techSupport);
-    std::string GetTechSupport() const;
+    void setTechnicianName(const std::string &technicianName);
+    const std::string &getTechnicianName() const;
 
-    void SetIssue(std::string issue);
-    std::string GetIssue() const;
+    void setIssueDescription(const std::string &issueDescription);
+    const std::string &getIssueDescription() const;
 
-    void SetDueDate(int dueDate);
-    int GetDueDate() const;
+    void setDueDate(const std::string &dueDate);
+    const std::string &getDueDate() const;
 
-    void SetPriority(int priorityLevel);
-    int GetPriority() const;
+    void setPriorityLevel(int priorityLevel);
+    int getPriorityLevel() const;
 
-    void Display() const;
+    void setIssueStatus(const std::string &issueStatus);
+    const std::string &getIssueStatus() const;
+
+    void display() const;
 
 private:
     int ticketId;
-    const std::string &clientName;
-    const std::string &technicianName;
-    const std::string &issueDescription;
-    int dueDate;
+    std::string clientName;
+    std::string technicianName;
+    std::string issueDescription;
+    std::string dueDate;
     int priorityLevel;
+    std::string issueStatus;
 };
 
 #endif
