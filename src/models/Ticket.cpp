@@ -1,77 +1,92 @@
 #include "Ticket.h"
-#include <string>
-using namespace std;
+#include <iostream>
 
 // Default constructor initializes all members to default values
-Ticket::Ticket() : ticket(-1), client("No Client"), technician("No Technician"), issue("No Issue"), deadline(-1), priority(0) {}
+Ticket::Ticket() : ticketId(-1), 
+                    clientName("John Doe"), 
+                    technicianName("Unassigned"), 
+                    issueDescription("None"), 
+                    dueDate("YYYY-MM-DD"), 
+                    priorityLevel(0), 
+                    issueStatus("Open") {}
 
 // Parameterized constructor initializes members with provided values
-Ticket::Ticket(int ticketNum, string clientInfo, string techSupport, string issue, int dueDate)
-         :  ticket(ticketNum), client(clientInfo), technician(techSupport), issue(issue), deadline(dueDate), priority(0) {};
+Ticket::Ticket(int ticketId, 
+                const std::string &clientName, 
+                const std::string &technicianName, 
+                const std::string &issueDescription, 
+                const std::string &dueDate, 
+                int priorityLevel)
+         :  ticketId(ticketId), 
+            clientName(clientName), 
+            technicianName(technicianName), 
+            issueDescription(issueDescription), 
+            dueDate(dueDate), 
+            priorityLevel(priorityLevel),
+            issueStatus("Open") {};
 
-void Ticket::SetTicketNum(int ticketNum) {
-    ticket = ticketNum;
+void Ticket::setTicketId(int ticketId) {
+    this->ticketId = ticketId;
 }
 
-int Ticket::GetTicketNum() const {
-    return ticket;
+int Ticket::getTicketId() const {
+    return ticketId;
 }
 
-void Ticket::SetClientInfo(string clientInfo) {
-    client = clientInfo;
+void Ticket::setClientName(const std::string &clientName) {
+    this->clientName = clientName;
 }
 
-string Ticket::GetClientInfo() const {
-    return client;
+const std::string &Ticket::getClientName() const {
+    return clientName;
 }
 
-void Ticket::SetTechSupport(string techSupport) {
-    technician = techSupport;
+void Ticket::setTechnicianName(const std::string &technicianName) {
+    this->technicianName = technicianName;
 }
 
-string Ticket::GetTechSupport() const {
-    return technician;
+const std::string &Ticket::getTechnicianName() const {
+    return technicianName;
 }
 
-void Ticket::SetIssue(string issue) {
-    this->issue = issue;
+void Ticket::setIssueDescription(const std::string &issueDescription) {
+    this->issueDescription = issueDescription;
 }
 
-string Ticket::GetIssue() const {
-    return issue;
+const std::string &Ticket::getIssueDescription() const {
+    return issueDescription;
 }
 
-void Ticket::SetDueDate(int dueDate) {
-    deadline = dueDate;
-    SetPriority(GetPriority()); // Automatically updates priority based on due date
+void Ticket::setDueDate(const std::string &dueDate) {
+    this->dueDate = dueDate;
 }
 
-int Ticket::GetDueDate() const {
-    return deadline;
+const std::string &Ticket::getDueDate() const {
+    return dueDate;
 }
 
-void Ticket::SetPriority(int priorityLevel) {
-    priority = priorityLevel;
+void Ticket::setPriorityLevel(int priorityLevel) {
+    this->priorityLevel = priorityLevel;
 }
 // Determines the priority level based on the due date
-int Ticket::GetPriority() const {
-    if (deadline <= 1) {
-        return 1;
-    } else if (deadline > 1 && deadline <= 7) {
-        return 2;
-    } else if (deadline > 7 && deadline <= 14) {
-        return 3;
-    } else {
-        return 4;
-    }
+int Ticket::getPriorityLevel() const {
+    return priorityLevel;
 }
 
-void Ticket::Display() const {
-    cout << "\nTicket number: " << ticket << endl;
-    cout << "Client Name: " << client << endl;
-    cout << "Technician Assigned: " << technician << endl;
-    cout << "Issue: " << issue << endl;
-    cout << "Due date: " << deadline << " days" << endl;
-    cout << "Priority Level: " << GetPriority() << endl;
+void Ticket::setIssueStatus(const std::string& status) {
+    this->issueStatus = status;
+}
+
+const std::string &Ticket::getIssueStatus() const {
+    return issueStatus;
+}
+
+void Ticket::display() const {
+    std::cout << "\nTicket number: " << getTicketId() << std::endl;
+    std::cout << "Client Name: " << getClientName() << std::endl;
+    std::cout << "Technician Assigned: " << getTechnicianName() << std::endl;
+    std::cout << "Issue: " << getIssueDescription() << std::endl;
+    std::cout << "Due date: " << getDueDate() << std::endl;
+    std::cout << "Priority Level: " << getPriorityLevel() << std::endl;
 }
 
