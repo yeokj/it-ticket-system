@@ -8,7 +8,7 @@ class Ticket {
 public:
     // Constructor
     Ticket();
-    Ticket( int ticketId, 
+    Ticket(int ticketId, 
             const std::string &clientName, 
             const std::string &technicianName, 
             const std::string &issueDescription, 
