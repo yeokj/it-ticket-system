@@ -1,100 +1,57 @@
-#include "TicketService.h"
 #include "Ticket.h"
-#include <iostream>
+#include "TicketService.h"
+#include "TicketHelper.h"
+#include <stdlib.h>
 #include <algorithm>
-#include <vector>
 
-using namespace std;
-
-// Function to append a new ticket to the incident list
-void appendTicket(vector<Ticket>& tickets) {
+// Function to create a new incident
+void TicketService::createTicket(std::vector<Ticket> &tickets) {
     Ticket ticket;
-    int ticketNum = rand() % 100;
-    string clientInfo, techSupport, issue;
-    int dueDate;
-    int folderNum;
+    int ticketId = std::rand() % 100;
+    std::string clientName, technicianName, issueDescription, dueDate;
 
-    ticket.SetTicketNum(ticketNum);
-    cout << "\nTicket number: " << ticketNum << endl;
+    ticket.setTicketId(ticketId);
+    std::cout << "\nTicket number: " << ticketId << std::endl;
 
     // Input client, technician, and issue information
-    cout << "What is the client's name? ";
-    cin.ignore();
-    getline(cin, clientInfo);
-    ticket.SetClientInfo(clientInfo);
+    std::cout << "\nWhat is the client's name? ";
+    std::getline(std::cin >> std::ws, clientName);
+    ticket.setClientName(clientName);
 
-    cout << "What is your name? ";
-    getline(cin, techSupport);
-    ticket.SetTechSupport(techSupport);
+    std::cout << "What is your name? ";
+    std::cin >> technicianName;
+    ticket.setTechnicianName(technicianName);
 
-    cout << "What is the issue? ";
-    cin >> issue;
-    ticket.SetIssue(issue);
+    std::cout << "What is the issue? ";
+    std::cin >> issueDescription;
+    ticket.setIssueDescription(issueDescription);
 
-    // Generate a random due date (1 to 31 days)
-    dueDate = rand() % 31 + 1;
-    ticket.SetDueDate(dueDate);
-    cout << "We will fix it in " << dueDate << " days." << endl;
+    bool isValid = false;
+    while (!isValid) {
+        std::cout << "Enter the date of the issue in this format ('YYY-MM-DD'): " << std::endl;
+        std::cin >> dueDate;
 
-    // Display priority based on due date
-    cout << "Priority: " << ticket.GetPriority() << endl;
-
-    tickets.push_back(ticket);
-    cout << "\nIncident Successfully Added Successfully!" << endl;
-}
-
-// Function to create a new incident at a specified position
-void createTicket(vector<Ticket>& tickets) {
-    Ticket ticket;
-    int ticketNum = rand() % 100;
-    string clientInfo, techSupport, issue;
-    int dueDate;
-    int index = 0;
-
-    ticket.SetTicketNum(ticketNum);
-    cout << "\nTicket number: " << ticketNum << endl;
-
-    // Ask for the index at which to insert the incident
-    if (!tickets.empty()) {
-        cout << "\nEnter the index number where you want to add this incident (0 to " << tickets.size() << "): ";
-        cin >> index;
-
-        if (index < 0 || index > tickets.size()) {
-            cout << "\nInvalid index number. Must be between 0 and " << tickets.size() << "." << endl;
-            return;
+        if (TicketHelper::validateDate(dueDate)) {
+            isValid = true;
         }
-    } else {
-        cout << "\nIncident list is currently empty. Adding the incident in index number 1." << endl;
-        index = 0;
+        else {
+            std::cout << "Invalid entry, please try again" << std::endl;
+        }
     }
+    ticket.setDueDate(dueDate);
 
-    // Input client, technician, and issue information
-    cout << "\nWhat is the client's name? ";
-    cin >> clientInfo;
-    ticket.SetClientInfo(clientInfo);
+    int p = TicketHelper::calculatePriority(dueDate);
+    ticket.setPriorityLevel(p);
 
-    cout << "What is your name? ";
-    cin >> techSupport;
-    ticket.SetTechSupport(techSupport);
-
-    cout << "What is the issue? ";
-    cin >> issue;
-    ticket.SetIssue(issue);
-
-    // Generate a random due date
-    dueDate = rand() % 31 + 1;
-    ticket.SetDueDate(dueDate);
-    cout << "We will fix it in " << dueDate << " days." << endl;
-
-    cout << "Priority: " << ticket.GetPriority() << endl;
+    std::cout << "Auto-assigned priority level: " << ticket.getPriorityLevel() << std::endl;
 
     // Insert the incident at the specified index
-    tickets.insert(tickets.begin() + index, ticket);
-    cout << "\nIncident Successfully Added at position " << index << "!" << endl;
+    tickets.push_back(ticket); 
+    std::cout << "\nIncident Added Successfully!" << std::endl;
 }
 
 // Function to remove an incident by ticket number
-void removeTicket(vector<Ticket>& tickets) {
+void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to delete." << endl;
         return;
@@ -123,25 +80,8 @@ void removeTicket(vector<Ticket>& tickets) {
     }
 }
 
-// Function to display incidents in reverse order of priority
-void reverseTicket(vector<Ticket>& tickets) {
-    Ticket ticket;
-    if (tickets.empty()) {
-        cout << "\nNo incidents to reverse." << endl;
-        return;
-    }
-
-    cout << "\nShowing Incidents in reverse priority order." << endl;
-
-    // Iterate through the incidents in reverse order
-    for (int i = tickets.size() - 1; i >= 0; i--) {
-       tickets[i].Display();
-    }
-    cout << endl;
-}
-
 // Function to sort incidents by priority
-void sortTicket(vector<Ticket>& tickets) {
+void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to sort." << endl;
         return;
@@ -167,72 +107,9 @@ void sortTicket(vector<Ticket>& tickets) {
         index++;
     }
 }
-// Function to search for an incident by ticket number
-void searchTicket(vector<Ticket>& tickets){
-    Ticket ticket;
-    int ticketNum;
-
-    cout << "Find your ticket via our Ticket Search Engine:" << endl;
-    cin >> ticketNum;
-
-    if (tickets.empty()) {
-        cout << "\nNo incidents to search." << endl;
-        return;
-    }
-
-    for (auto i = tickets.begin(); i != tickets.end(); i++) {
-        if (ticketNum == i->GetTicketNum()) {
-             i->Display();
-            return;
-        }
-    }
-    cout << "\nNo ticket found."<< endl;
-}
-// Function to filter incidents by priority level (highest or lowest)
-void priorityTicket(vector<Ticket>& tickets) {
-    int index=1;
-    string choice;
-
-    if (tickets.empty()) {
-        cout << "\nThere are no incidents." << endl;
-        return;
-    }
-
-    cout << "What priority do you want to search (lowest or highest): ";
-    cin >> choice;
-
-    // Convert choice to lowercase using a loop
-    for (auto &ch : choice) {
-        ch = tolower(ch);  // Convert each character to lowercase
-    }
-
-    if (choice == "highest") {
-        // Display incidents with the highest priority (priority = 1)
-        for (auto i = tickets.begin(); i != tickets.end(); i++) {
-            if (i->GetPriority() == 1) {
-                cout << "\n" << index << ")" << endl;
-                i->Display();
-                index++;
-            }
-        }
-    } else if (choice == "lowest") {
-        // Display incidents with the lowest priority (priority = 4)
-        for (auto i = tickets.begin(); i != tickets.end(); i++) {
-            if (i->GetPriority() == 4) {
-                cout << "\n" << index << ")" << endl;
-                i->Display();
-                index++;
-            }
-        }
-    } else {
-        cout << "Please enter either 'lowest' or 'highest'." << endl;
-    }
-
-    cout << endl;
-}
 
 // Function to display all incidents
-void displayAllTickets(const vector<Ticket>& tickets) {
+void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
 
     if (tickets.empty()) {
         cout << "\nNo incidents to display." << endl;
@@ -248,7 +125,7 @@ void displayAllTickets(const vector<Ticket>& tickets) {
 }
 
 // Function to update an incident's due date or technician
-void updateTicket(vector<Ticket>& tickets) {
+void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to update." << endl;
         return;
@@ -297,7 +174,7 @@ void updateTicket(vector<Ticket>& tickets) {
     }
 }
 // Function to filter incidents based on a specific priority
-void filterTicket(const vector<Ticket>& tickets) {
+void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     int index=1;
     if (tickets.empty()) {
         cout << "\nNo incidents available to filter." << endl;
