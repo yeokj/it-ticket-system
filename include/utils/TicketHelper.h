@@ -13,6 +13,7 @@ class TicketHelper {
     static bool isFormatValid(const std::string &date);
     static bool isValuesValid(int y, int m, int d);
     static int dateToDays(int y, int m, int d);
+    static int determinePriority(int diff);
 };
 
 #endif
