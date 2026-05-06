@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <algorithm>
 
-// Function to create a new incident
 void TicketService::createTicket(std::vector<Ticket> &tickets) {
     Ticket ticket;
     int ticketId = std::rand() % 100;
@@ -50,7 +49,6 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     std::cout << "\nIncident Added Successfully!" << std::endl;
 }
 
-// Function to remove an incident by ticket number
 void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to delete." << endl;
@@ -80,7 +78,6 @@ void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     }
 }
 
-// Function to sort incidents by priority
 void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to sort." << endl;
@@ -108,23 +105,21 @@ void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
     }
 }
 
-// Function to display all incidents
 void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
-
     if (tickets.empty()) {
-        cout << "\nNo incidents to display." << endl;
+        std::cout << "\nNo incidents to display." << std::endl;
         return;
     }
+
     int i = 1;
-    for (const auto& ticket : tickets) {
-        cout << i << ")\n";
-        ticket.Display();
-        cout << endl;
+    for (const auto &ticket : tickets) {
+        std::cout << i << ")\n";
+        ticket.display();
+        std::cout << std::endl;
         i++;
-        }
+    }
 }
 
-// Function to update an incident's due date or technician
 void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         cout << "\nNo incidents to update." << endl;
@@ -173,7 +168,7 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
         cout << "\nNo incident found with ticket number " << ticketNum << endl;
     }
 }
-// Function to filter incidents based on a specific priority
+
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     int index=1;
     if (tickets.empty()) {
@@ -204,4 +199,3 @@ void TicketService::findTickets(const std::vector<Ticket> &tickets) {
         cout << "\nNo incidents found with priority level " << filterPriority << endl;
     }
 }
-
