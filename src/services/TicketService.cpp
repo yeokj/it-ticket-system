@@ -51,30 +51,28 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
 
 void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
-        cout << "\nNo incidents to delete." << endl;
+        std::cout << "\nNo incidents to delete." << std::endl;
         return;
     }
 
-    int ticketNum;
-    cout << "\nEnter ticket number to delete an incident: ";
-    cin >> ticketNum;
+    displayTickets(tickets);
 
-    bool found = false;
-    for (auto it = tickets.begin(); it != tickets.end(); ++it) {
-        if (it->GetTicketNum() == ticketNum) {
-            // Display incident before deletion for debugging
-            cout << "\nDeleting incident with ticket number: " << ticketNum << endl;
-            it->Display();
+    int ticketChoice;
 
-            tickets.erase(it); // Erase the incident
-            cout << "\nIncident with ticket number " << ticketNum << " has been deleted." << endl;
-            found = true;
+    while (true) {
+        std::cout << "Select a ticket from (1 - " << tickets.size() << ") to remove: ";
+        std::cin >> ticketChoice;
+
+        if ((ticketChoice >= 1) && (ticketChoice <= tickets.size())) {
+            tickets.erase(tickets.begin() + (ticketChoice - 1));
+            std::cout << "Ticket successfully deleted\n";
             break;
         }
-    }
-
-    if (!found) {
-        cout << "\nNo incident found with ticket number " << ticketNum << endl;
+        else {
+            std::cout << "Invalid input, please try again\n";
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+        }
     }
 }
 
@@ -125,8 +123,6 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
         std::cout << "\nNo incidents to update." << std::endl;
         return;
     }
-
-    std::cout <<"Please select a ticket to update.\n";
 
     displayTickets(tickets);
 
