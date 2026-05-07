@@ -116,57 +116,78 @@ void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
         std::cout << i << ")\n";
         ticket.display();
         std::cout << std::endl;
-        i++;
+        ++i;
     }
 }
 
 void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
-        cout << "\nNo incidents to update." << endl;
+        std::cout << "\nNo incidents to update." << std::endl;
         return;
     }
 
-    int ticketNum;
-    cout << "\nEnter the ticket number of the incident you want to update: ";
-    cin >> ticketNum;
+    std::cout <<"Please select a ticket to update.\n";
 
-    bool found = false;
-    for (auto& ticket : tickets) {
-        if (ticket.GetTicketNum() == ticketNum) {
-            found = true;
-            ticket.Display();
+    displayTickets(tickets);
 
-            int choice;
-            cout << "\nWhat would you like to update?" << endl;
-            cout << "1) Update Due Date" << endl;
-            cout << "2) Update Technician" << endl;
-            cout << "Enter your choice: ";
-            cin >> choice;
+    int ticketChoice;
+    while (true) {
+        std::cout <<"Select a ticket number (1 - " << tickets.size() << "):";
+        std::cin >> ticketChoice;
 
-            if (choice == 1) {
-                int newDueDate;
-                cout << "\nEnter new due date: ";
-                cin >> newDueDate;
-                ticket.SetDueDate(newDueDate);
-                cout << "\nDue date updated successfully." << endl;
-            } else if (choice == 2) {
-                string newTechnician;
-                cout << "\nEnter new technician name: ";
-                cin.ignore(); // Clear input buffer
-                getline(cin, newTechnician);
-                ticket.SetTechSupport(newTechnician);
-                cout << "\nTechnician updated successfully." << endl;
-            } else {
-                cout << "\nInvalid choice. Update canceled." << endl;
-            }
-            ticket.Display();
+        if ((ticketChoice >= 1) && (ticketChoice <= tickets.size())) {
+            std::cout << "Updating ticket #" << ticketChoice;
             break;
         }
+        std::cout << "Invalid input, please try again\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
     }
 
-    if (!found) {
-        cout << "\nNo incident found with ticket number " << ticketNum << endl;
+    bool done = false;
+    int statusChoice;
+    while (!done) {
+        std::cout << "\nWhat would you like to update?\n";
+        std::cout << "1) Update status to 'In Progress'\n";
+        std::cout << "2) Update status to 'On Hold'\n";
+        std::cout << "3) Update status to 'Resolved'\n";
+        std::cout << "4) Update Technicain\n";
+        std::cout << "5) Exit\n"; 
+        
+        std::cin >> statusChoice;
+
+        switch (statusChoice) {
+            case 1:
+                tickets[ticketChoice - 1].setIssueStatus("In Progress");
+                done = true;
+                break;
+            case 2:
+                tickets[ticketChoice - 1].setIssueStatus("On Hold");
+                done = true;
+                break;
+            case 3:
+                tickets[ticketChoice - 1].setIssueStatus("Resolved");
+                done = true;
+                break;
+            case 4: {
+                std::string newTechnician;
+                std::cout << "Enter technician's name: ";
+                std::getline(std::cin >> std::ws, newTechnician);
+                tickets[ticketChoice - 1].setTechnicianName(newTechnician);
+                done = true;
+                break;
+            }
+            case 5:
+                std::cout << "Update cancelled\n";
+                return;
+            default:
+                std::cout << "Invalid entry, please try again\n";
+                std::cin.clear();
+                std::cin.ignore(1000, '\n');
+                break;
+        }
     }
+    std::cout << "Ticket updated successfully\n";
 }
 
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
