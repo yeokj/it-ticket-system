@@ -148,3 +148,7 @@ void TicketHelper::sortDateDescend(std::vector<Ticket> &tempTickets) {
             return a.getDueDate() > b.getDueDate();
         });
 }
+
+void TicketHelper::reverseOrder(std::vector<Ticket> &tempTickets) {
+    std::reverse(tempTickets.begin(), tempTickets.end());
+}

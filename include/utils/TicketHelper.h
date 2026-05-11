@@ -13,6 +13,7 @@ class TicketHelper {
     static void sortPriorityDescend(std::vector<Ticket> &tempTickets);
     static void sortDateAscend(std::vector<Ticket> &tempTickets);
     static void sortDateDescend(std::vector<Ticket> &tempTickets);
+    static void reverseOrder(std::vector<Ticket> &tempTickets);
 
     private:
     static bool isFormatValid(const std::string &date);
