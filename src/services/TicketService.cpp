@@ -44,14 +44,13 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
 
     std::cout << "Auto-assigned priority level: " << ticket.getPriorityLevel() << std::endl;
 
-    // Insert the incident at the specified index
     tickets.push_back(ticket); 
     std::cout << "\nIncident Added Successfully!" << std::endl;
 }
 
 void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
-        std::cout << "\nNo incidents to delete." << std::endl;
+        std::cout << "\nNo tickets to delete." << std::endl;
         return;
     }
 
@@ -78,55 +77,67 @@ void TicketService::removeTicket(std::vector<Ticket> &tickets) {
 
 void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
-        cout << "\nNo incidents to sort." << endl;
+        std::cout << "\nNo tickets to sort." << std::endl;
         return;
     }
 
-    // Sort incidents based on priority (highest first)
-    for (int i = 0; i < tickets.size() - 1; i++) {
-        for (int j = 0; j < tickets.size() - i - 1; j++) {
-            if (tickets[j].GetPriority() < tickets[j + 1].GetPriority()) {
-                // Swap incidents[j] and incidents[j + 1]
-                Ticket temp = tickets[j];
-                tickets[j] = tickets[j + 1];
-                tickets[j + 1] = temp;
-            }
+    std::vector<Ticket> tempTickets = tickets;
+    int sortChoice;
+
+    while (true) {
+        std::cout << "How would you like to sort the tickets\n";
+        std::cout << "\n1) Ascending Order via Priority Level\n";
+        std::cout << "2) Descending Order via Priority Level\n";
+        std::cout << "3) Ascending Order via Due Date\n";
+        std::cout << "4) Descending Order via Due Date\n";
+        std::cout << "5) Reverse Order\n";
+        std::cout << "6) Exit\n";
+
+        std::cin >> sortChoice;
+
+        switch (sortChoice)
+        {
+        case 1:
+            TicketHelper::sortPriorityAscend(tempTickets);
+            displayTickets(tempTickets);
+            break;
+        case 2:
+            TicketHelper::sortPriorityDescend(tempTickets);
+            displayTickets(tempTickets);
+            break;
+        case 3:
+            TicketHelper::sortDateAscend(tempTickets);
+            displayTickets(tempTickets);
+            break;
+        case 4:
+            TicketHelper::sortDateDescend(tempTickets);
+            displayTickets(tempTickets);
+            break;
+        case 5:
+            TicketHelper::reverseOrder(tempTickets);
+            displayTickets(tempTickets);
+            break;
+        case 6:
+            std::cout << "Exiting back to the main menu...\n";
+            return;
+        default:
+            std::cout << "Invalid entry, please try again\n";
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+            break;
         }
-    }
-
-    cout << "\nIncident List (Top Priority First):" << endl;
-    int index=1;
-    for (const auto& ticket : tickets) {
-        cout << "\n" << index << ")" << endl;
-        ticket.Display();
-        index++;
-    }
-}
-
-void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
-    if (tickets.empty()) {
-        std::cout << "\nNo incidents to display." << std::endl;
-        return;
-    }
-
-    int i = 1;
-    for (const auto &ticket : tickets) {
-        std::cout << i << ")\n";
-        ticket.display();
-        std::cout << std::endl;
-        ++i;
     }
 }
 
 void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
-        std::cout << "\nNo incidents to update." << std::endl;
+        std::cout << "\nNo tickets to update." << std::endl;
         return;
     }
 
     displayTickets(tickets);
-
     int ticketChoice;
+
     while (true) {
         std::cout <<"Select a ticket number (1 - " << tickets.size() << "):";
         std::cin >> ticketChoice;
@@ -142,6 +153,7 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
 
     bool done = false;
     int statusChoice;
+
     while (!done) {
         std::cout << "\nWhat would you like to update?\n";
         std::cout << "1) Update status to 'In Progress'\n";
@@ -189,7 +201,7 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     int index=1;
     if (tickets.empty()) {
-        cout << "\nNo incidents available to filter." << endl;
+        cout << "\nNo tickets available to filter." << endl;
         return;
     }
 
