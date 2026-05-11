@@ -107,3 +107,13 @@ int TicketHelper::calculatePriority(const std::string &date) {
 
     return determinePriority(dueTotal - todayTotal);
 }
+
+void TicketHelper::sortPriorityAscend(std::vector<Ticket> &tempTickets) {
+    sort(tempTickets.begin(), tempTickets.end(),
+            [](const Ticket &a, const Ticket &b) {
+            if (a.getPriorityLevel() == b.getPriorityLevel()) { 
+                return a.getDueDate() < b.getDueDate(); 
+            }
+            return a.getPriorityLevel() < b.getPriorityLevel();
+        });
+}

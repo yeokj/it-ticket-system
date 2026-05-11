@@ -8,6 +8,10 @@ class TicketHelper {
     public:
     static bool validateDate(const std::string &date);
     static int calculatePriority(const std::string &date);
+    static void sortPriorityAscend(std::vector<Ticket> &tempTickets);
+    static void sortPriorityDescend(std::vector<Ticket> &tempTickets);
+    static void sortDateAscend(std::vector<Ticket> &tempTickets);
+    static void sortDateDescend(std::vector<Ticket> &tempTickets);
 
     private:
     static bool isFormatValid(const std::string &date);
