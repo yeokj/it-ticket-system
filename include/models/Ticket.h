@@ -3,7 +3,7 @@
 
 #include <string>
 
-// Class to represent an incident ticket (created by Kyame)
+// Class to represent a Ticket (created by Kyame)
 class Ticket {
 public:
     // Constructor

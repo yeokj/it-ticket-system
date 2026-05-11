@@ -1,6 +1,7 @@
 #include "TicketHelper.h"
 #include <string>
 #include <chrono>
+#include <algorithm>
 
 bool TicketHelper::isFormatValid(const std::string &date) {
     return (date.length() == 10 && ((date[4] == '-') && (date[7] == '-')));
@@ -109,11 +110,21 @@ int TicketHelper::calculatePriority(const std::string &date) {
 }
 
 void TicketHelper::sortPriorityAscend(std::vector<Ticket> &tempTickets) {
-    sort(tempTickets.begin(), tempTickets.end(),
-            [](const Ticket &a, const Ticket &b) {
+    std::sort(tempTickets.begin(), tempTickets.end(),
+        [](const Ticket &a, const Ticket &b) {
             if (a.getPriorityLevel() == b.getPriorityLevel()) { 
                 return a.getDueDate() < b.getDueDate(); 
             }
             return a.getPriorityLevel() < b.getPriorityLevel();
+        });
+}
+
+void TicketHelper::sortPriorityDescend(std::vector<Ticket> &tempTickets) {
+    std::sort(tempTickets.begin(), tempTickets.end(),
+        [](const Ticket &a, const Ticket &b) {
+            if (a.getPriorityLevel() == b.getPriorityLevel()) {
+                return a.getDueDate() < b.getDueDate();
+            }
+            return a.getPriorityLevel() > b.getPriorityLevel();
         });
 }
