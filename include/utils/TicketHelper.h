@@ -3,6 +3,7 @@
 
 #include "Ticket.h"
 #include <iostream>
+#include <vector>
 
 class TicketHelper {
     public:

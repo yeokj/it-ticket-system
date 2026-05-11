@@ -128,3 +128,23 @@ void TicketHelper::sortPriorityDescend(std::vector<Ticket> &tempTickets) {
             return a.getPriorityLevel() > b.getPriorityLevel();
         });
 }
+
+void TicketHelper::sortDateAscend(std::vector<Ticket> &tempTickets) {
+    std::sort(tempTickets.begin(), tempTickets.end(),
+        [](const Ticket &a, const Ticket &b) {
+            if (a.getDueDate() == b.getDueDate()) {
+                return a.getPriorityLevel() < b.getPriorityLevel();
+            }
+            return a.getDueDate() < b.getDueDate();
+        });
+}
+
+void TicketHelper::sortDateDescend(std::vector<Ticket> &tempTickets) {
+    std::sort(tempTickets.begin(), tempTickets.end(),
+        [](const Ticket &a, const Ticket &b) {
+            if (a.getDueDate() == b.getDueDate()) {
+                return a.getPriorityLevel() < b.getPriorityLevel();
+            }
+            return a.getDueDate() > b.getDueDate();
+        });
+}
