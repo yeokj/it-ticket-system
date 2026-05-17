@@ -68,7 +68,12 @@ void TicketService::removeTicket(std::vector<Ticket> &tickets) {
         std::cin >> ticketChoice;
 
         if ((ticketChoice >= 1) && (ticketChoice <= tickets.size())) {
-            tickets.erase(tickets.begin() + (ticketChoice - 1));
+            int targetIndex = ticketChoice - 1;
+            int idToRemove = tickets[targetIndex].getTicketId();
+
+            tickets.erase(tickets.begin() + targetIndex);
+            ticketSet.erase(idToRemove);
+            
             std::cout << "Ticket successfully deleted\n";
             break;
         }
