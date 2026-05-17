@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 #include <algorithm>
+#include <cstdlib>
 
 bool TicketHelper::isFormatValid(const std::string &date) {
     return (date.length() == 10 && ((date[4] == '-') && (date[7] == '-')));
@@ -151,4 +152,18 @@ void TicketHelper::sortDateDescend(std::vector<Ticket> &tempTickets) {
 
 void TicketHelper::reverseOrder(std::vector<Ticket> &tempTickets) {
     std::reverse(tempTickets.begin(), tempTickets.end());
+}
+
+int TicketHelper::generateTicket(std::unordered_set<int> &ticketSet) {
+    if (ticketSet.size() >= 9000) {
+        return 0;
+    }
+
+    while (true) {
+        int randomID = 1000 + (std::rand() % 9000);
+        if (ticketSet.find(randomID) == ticketSet.end()) {
+            ticketSet.insert(randomID);
+            return randomID;
+        }
+    }
 }

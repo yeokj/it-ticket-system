@@ -6,11 +6,16 @@
 
 void TicketService::createTicket(std::vector<Ticket> &tickets) {
     Ticket ticket;
-    int ticketId = std::rand() % 100;
+
+    int ticketID = TicketHelper::generateTicket(ticketSet);
+    if (ticketID == 0) {
+        std::cout << "Error: Ticket database is full. Cannot create new ticket.\n";
+        return;
+    }
     std::string clientName, technicianName, issueDescription, dueDate;
 
-    ticket.setTicketId(ticketId);
-    std::cout << "\nTicket number: " << ticketId << std::endl;
+    ticket.setTicketId(ticketID);
+    std::cout << "\nTicket number: " << ticketID << std::endl;
 
     // Input client, technician, and issue information
     std::cout << "\nWhat is the client's name? ";
@@ -95,8 +100,7 @@ void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
 
         std::cin >> sortChoice;
 
-        switch (sortChoice)
-        {
+        switch (sortChoice) {
         case 1:
             TicketHelper::sortPriorityAscend(tempTickets);
             displayTickets(tempTickets);
@@ -199,9 +203,8 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
 }
 
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
-    int index=1;
     if (tickets.empty()) {
-        cout << "\nNo tickets available to filter." << endl;
+        std::cout << "\nNo tickets available to filter." << std::endl;
         return;
     }
 
