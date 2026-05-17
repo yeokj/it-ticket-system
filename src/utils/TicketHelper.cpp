@@ -167,3 +167,14 @@ int TicketHelper::generateTicket(std::unordered_set<int> &ticketSet) {
         }
     }
 }
+
+std::vector<Ticket> TicketHelper::filterByPriority(const std::vector<Ticket> &tickets, int priority) {
+    std::vector<Ticket> matches;
+
+    for (const auto &ticket : tickets) {
+        if (ticket.getPriorityLevel() == priority) {
+            matches.push_back(ticket);
+        }
+    }
+    return matches;
+}

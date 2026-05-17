@@ -16,6 +16,7 @@ public:
     static void sortDateDescend(std::vector<Ticket> &tempTickets);
     static void reverseOrder(std::vector<Ticket> &tempTickets);
     static int generateTicket(std::unordered_set<int> &ticketSet);
+    static std::vector<Ticket> filterByPriority(const std::vector<Ticket>& tickets, int priority);
 
 private:
     static bool isFormatValid(const std::string &date);

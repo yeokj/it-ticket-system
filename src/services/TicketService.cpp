@@ -73,7 +73,7 @@ void TicketService::removeTicket(std::vector<Ticket> &tickets) {
 
             tickets.erase(tickets.begin() + targetIndex);
             ticketSet.erase(idToRemove);
-            
+
             std::cout << "Ticket successfully deleted\n";
             break;
         }
@@ -213,26 +213,27 @@ void TicketService::findTickets(const std::vector<Ticket> &tickets) {
         return;
     }
 
-    int filterPriority;
-    cout << "\nEnter the priority level to filter incidents (1 - Low, 2 - Mid, 3 - High, 4 - Highest): ";
-    cin >> filterPriority;
+    int filterChoice;
 
-    vector<Ticket> filteredTickets;
-    for (const auto& ticket : tickets) {
-        if (ticket.GetPriority() == filterPriority) {
-            filteredTickets.push_back(ticket);
+    while (true) {
+        std::cout << "\nEnter a priority level to filter tickets (1 (Highest) - 4 (Lowest): ";
+        std::cin >> filterChoice;
+
+        if ((filterChoice >= 1) && (filterChoice <= 4)) {
+            std::cout << "Showing tickets at Priority Level: " << filterChoice << std::endl;
+            break;
         }
+        std::cout << "Invalid input, please try again\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
     }
 
-    if (!filteredTickets.empty()) {
-        cout << "\nFiltered Incidents with Priority Level " << filterPriority << ":" << endl;
-        for (const auto& ticket : filteredTickets) {
-            cout << "\n" << index << ")" << endl;
-            ticket.Display();
-            cout << endl;
-            index++;
-        }
-    } else {
-        cout << "\nNo incidents found with priority level " << filterPriority << endl;
+    std::vector<Ticket> filteredTickets = TicketHelper::filterByPriority(tickets, filterChoice);
+
+    if (filteredTickets.empty()) {
+        std::cout << "No tickets found with the Priority Level you chosen.\n";
+    }
+    else {
+        displayTickets(filteredTickets);
     }
 }
