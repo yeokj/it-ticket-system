@@ -1,5 +1,5 @@
-#ifndef TICKETHELPER.H
-#define TICKETHELPER.H
+#ifndef TICKETHELPER_H
+#define TICKETHELPER_H
 
 #include "Ticket.h"
 #include "TicketService.h"

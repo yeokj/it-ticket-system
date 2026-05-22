@@ -23,7 +23,7 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     ticket.setClientName(clientName);
 
     std::cout << "What is your name? ";
-    std::cin >> technicianName;
+    std::getline(std::cin >> std::ws, technicianName);
     ticket.setTechnicianName(technicianName);
 
     std::cout << "What is the issue? ";
