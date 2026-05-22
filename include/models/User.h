@@ -6,18 +6,28 @@
 
 class User {
 public:
-    User(int id, std::string name, std::string email);
+    User(int id, const std::string &name, const std::string &email);
     virtual ~User();
     void setID(int id);
     int getID() const;
-    void setName(std::string name);
+    void setName(const std::string &name);
     std::string getName() const;
-    void setEmail(std::string email);
+    void setEmail(const std::string &email);
     std::string getEmail() const;
 protected:
     int id;
     std::string name;
     std::string email;
+};
+
+class Client : public User {
+public:
+    Client(int id, const std::string &name, const std::string &email, const std::string &company);
+    virtual ~Client() override;
+    void setCompany(const std::string &company);
+    std::string getCompany() const;
+private:
+    std::string company;
 };
 
 #endif
