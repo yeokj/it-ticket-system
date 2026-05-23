@@ -30,4 +30,17 @@ private:
     std::string company;
 };
 
+class Technician : public User {
+public:
+    Technician(int id, const std::string &name, const std::string &email, int emplID, const std::string &department);
+    virtual ~Technician() override;
+    void setEmplID(int emplID);
+    int getEmplID() const;
+    void setDepartment(const std::string &department);
+    std::string getDepartment() const;
+private:
+    int emplID;
+    std::string department;
+};
+
 #endif
