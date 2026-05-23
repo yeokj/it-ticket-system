@@ -3,8 +3,8 @@
 
 // Default constructor initializes all members to default values
 Ticket::Ticket() : ticketId(-1), 
-                    clientName("John Doe"), 
-                    technicianName("Unassigned"), 
+                    client(nullptr), 
+                    technician(nullptr), 
                     issueDescription("None"), 
                     dueDate("YYYY-MM-DD"), 
                     priorityLevel(0), 
@@ -12,14 +12,14 @@ Ticket::Ticket() : ticketId(-1),
 
 // Parameterized constructor initializes members with provided values
 Ticket::Ticket(int ticketId, 
-                const std::string &clientName, 
-                const std::string &technicianName, 
+                std::shared_ptr<Client> client, 
+                std::shared_ptr<Technician> technician, 
                 const std::string &issueDescription, 
                 const std::string &dueDate, 
                 int priorityLevel)
          :  ticketId(ticketId), 
-            clientName(clientName), 
-            technicianName(technicianName), 
+            client(client), 
+            technician(technician), 
             issueDescription(issueDescription), 
             dueDate(dueDate), 
             priorityLevel(priorityLevel),
@@ -33,20 +33,20 @@ int Ticket::getTicketId() const {
     return ticketId;
 }
 
-void Ticket::setClientName(const std::string &clientName) {
-    this->clientName = clientName;
+void Ticket::setClient(std::shared_ptr<Client> client) {
+    this->client = client;
 }
 
-const std::string &Ticket::getClientName() const {
-    return clientName;
+std::shared_ptr<Client> Ticket::getClient() const {
+    return client;
 }
 
-void Ticket::setTechnicianName(const std::string &technicianName) {
-    this->technicianName = technicianName;
+void Ticket::setTechnician(std::shared_ptr<Technician> technician) {
+    this->technician = technician;
 }
 
-const std::string &Ticket::getTechnicianName() const {
-    return technicianName;
+std::shared_ptr<Technician> Ticket::getTechnician() const {
+    return technician;
 }
 
 void Ticket::setIssueDescription(const std::string &issueDescription) {
@@ -68,7 +68,7 @@ const std::string &Ticket::getDueDate() const {
 void Ticket::setPriorityLevel(int priorityLevel) {
     this->priorityLevel = priorityLevel;
 }
-// Determines the priority level based on the due date
+
 int Ticket::getPriorityLevel() const {
     return priorityLevel;
 }
@@ -83,8 +83,21 @@ const std::string &Ticket::getIssueStatus() const {
 
 void Ticket::display() const {
     std::cout << "\nTicket number: " << getTicketId() << std::endl;
-    std::cout << "Client Name: " << getClientName() << std::endl;
-    std::cout << "Technician Assigned: " << getTechnicianName() << std::endl;
+
+    if (client == nullptr) {
+        std::cout << "Client Name: Unknown" << std::endl;
+    }
+    else {
+        std::cout << "Client Name: " << getClient()->getName() << std::endl;
+    }
+
+    if (technician == nullptr) {
+        std::cout << "Technician Assigned: Unassigned" << std::endl;
+    }
+    else {
+        std::cout << "Technician Assigned: " << getTechnician()->getName() << std::endl;
+    }
+
     std::cout << "Issue: " << getIssueDescription() << std::endl;
     std::cout << "Due date: " << getDueDate() << std::endl;
     std::cout << "Priority Level: " << getPriorityLevel() << std::endl;
