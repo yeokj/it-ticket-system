@@ -23,7 +23,7 @@ Ticket::Ticket(int ticketId,
             issueDescription(issueDescription), 
             dueDate(dueDate), 
             priorityLevel(priorityLevel),
-            issueStatus("Open") {};
+            issueStatus("Open") {}
 
 void Ticket::setTicketId(int ticketId) {
     this->ticketId = ticketId;
@@ -88,5 +88,6 @@ void Ticket::display() const {
     std::cout << "Issue: " << getIssueDescription() << std::endl;
     std::cout << "Due date: " << getDueDate() << std::endl;
     std::cout << "Priority Level: " << getPriorityLevel() << std::endl;
+    std::cout << "Status: " << getIssueStatus() << std::endl;
 }
 
