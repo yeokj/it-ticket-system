@@ -31,7 +31,6 @@ std::string User::getEmail() const {
     return email;
 }
 
-
 Client::Client(int id, const std::string &name, const std::string &email, const std::string &company) : User(id, name, email),
                                                                                                         company(company) {}
 
@@ -43,4 +42,26 @@ void Client::setCompany(const std::string &company) {
 
 std::string Client::getCompany() const {
     return company;
+}
+
+Technician::Technician(int id, const std::string &name, const std::string &email, int emplID, const std::string &department) : User(id, name, email),
+                                                                                                                                emplID(emplID),
+                                                                                                                                department(department) {}
+
+Technician::~Technician() {}
+
+void Technician::setEmplID(int emplID) {
+    this->emplID = emplID;
+}
+
+int Technician::getEmplID() const {
+    return emplID;
+}
+
+void Technician::setDepartment(const std::string &department) {
+    this->department = department;
+}
+
+std::string Technician::getDepartment() const {
+    return department;
 }
