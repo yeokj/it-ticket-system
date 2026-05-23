@@ -1,7 +1,9 @@
 #ifndef TICKET_H
 #define TICKET_H
 
+#include "User.h"
 #include <string>
+#include <memory>
 
 // Class to represent a Ticket (created by Kyame)
 class Ticket {
@@ -9,8 +11,8 @@ public:
     // Constructor
     Ticket();
     Ticket(int ticketId, 
-            const std::string &clientName, 
-            const std::string &technicianName, 
+            std::shared_ptr<Client> client, 
+            std::shared_ptr<Technician> technician, 
             const std::string &issueDescription, 
             const std::string &dueDate,
             int priorityLevel);
@@ -19,11 +21,11 @@ public:
     void setTicketId(int ticketId);
     int getTicketId() const;
 
-    void setClientName(const std::string &clientName);
-    const std::string &getClientName() const;
+    void setClient(std::shared_ptr<Client> client);
+    std::shared_ptr<Client> getClient() const;
 
-    void setTechnicianName(const std::string &technicianName);
-    const std::string &getTechnicianName() const;
+    void setTechnician(std::shared_ptr<Technician> technician);
+    std::shared_ptr<Technician> getTechnician() const;
 
     void setIssueDescription(const std::string &issueDescription);
     const std::string &getIssueDescription() const;
@@ -41,8 +43,8 @@ public:
 
 private:
     int ticketId;
-    std::string clientName;
-    std::string technicianName;
+    std::shared_ptr<Client> client;
+    std::shared_ptr<Technician> technician;
     std::string issueDescription;
     std::string dueDate;
     int priorityLevel;
