@@ -30,3 +30,17 @@ void User::setEmail(const std::string &email) {
 std::string User::getEmail() const {
     return email;
 }
+
+
+Client::Client(int id, const std::string &name, const std::string &email, const std::string &company) : User(id, name, email),
+                                                                                                        company(company) {}
+
+Client::~Client() {}
+
+void Client::setCompany(const std::string &company) {
+    this->company = company;
+}
+
+std::string Client::getCompany() const {
+    return company;
+}
