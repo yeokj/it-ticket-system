@@ -4,28 +4,6 @@
 #include <algorithm>
 #include <cstdlib>
 
-std::shared_ptr<Client> TicketHelper::verifyClientEmail(const std::vector<Ticket> &tickets, const std::string &email) {
-    for (const auto &ticket : tickets) {
-        if (ticket.getClient() != nullptr) {
-            if (ticket.getClient()->getEmail() == email) {
-                return ticket.getClient();
-            }
-        }
-    }
-    return nullptr;
-}
-
-std::shared_ptr<Technician> TicketHelper::verifyTechEmail(const std::vector<Ticket> &tickets, const std::string &email) {
-    for (const auto &ticket : tickets) {
-        if (ticket.getTechnician() != nullptr) {
-            if (ticket.getTechnician()->getEmail() == email) {
-                return ticket.getTechnician();
-            }
-        }
-    }
-    return nullptr;
-}
-
 bool TicketHelper::isFormatValid(const std::string &date) {
     return (date.length() == 10 && ((date[4] == '-') && (date[7] == '-')));
 }
@@ -199,4 +177,53 @@ std::vector<Ticket> TicketHelper::filterByPriority(const std::vector<Ticket> &ti
         }
     }
     return matches;
+}
+
+std::shared_ptr<Client> TicketHelper::verifyClientEmail(const std::vector<Ticket> &tickets, const std::string &email) {
+    for (const auto &ticket : tickets) {
+        if (ticket.getClient() != nullptr) {
+            if (ticket.getClient()->getEmail() == email) {
+                return ticket.getClient();
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Technician> TicketHelper::verifyTechEmail(const std::vector<Ticket> &tickets, const std::string &email) {
+    for (const auto &ticket : tickets) {
+        if (ticket.getTechnician() != nullptr) {
+            if (ticket.getTechnician()->getEmail() == email) {
+                return ticket.getTechnician();
+            }
+        }
+    }
+    return nullptr;
+}
+
+bool TicketHelper::validateEmail(const std::string &email) {
+    size_t atPos = email.find('@');
+    size_t lastDotPos = email.rfind('.');
+
+    if (atPos == std::string::npos || lastDotPos == std::string::npos) {
+        return false;
+    }
+
+    if (atPos == 0) {
+        return false;
+    }
+
+    if (lastDotPos <= atPos + 1) {
+        return false;
+    }
+
+    if (lastDotPos == email.length() - 1) {
+        return false;
+    }
+
+    if (email.find(' ') != std::string::npos) {
+        return false;
+    }
+
+    return true;
 }

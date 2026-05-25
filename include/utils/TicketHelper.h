@@ -19,6 +19,7 @@ public:
     static std::vector<Ticket> filterByPriority(const std::vector<Ticket>& tickets, int priority);
     static std::shared_ptr<Client> verifyClientEmail(const std::vector<Ticket> &tickets, const std::string &email);
     static std::shared_ptr<Technician> verifyTechEmail(const std::vector<Ticket> &tickets, const std::string &email);
+    static bool validateEmail(const std::string &email);
 
 private:
     static bool isFormatValid(const std::string &date);
