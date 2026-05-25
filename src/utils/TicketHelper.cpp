@@ -4,6 +4,28 @@
 #include <algorithm>
 #include <cstdlib>
 
+std::shared_ptr<Client> TicketHelper::verifyClientEmail(const std::vector<Ticket> &tickets, const std::string &email) {
+    for (const auto &ticket : tickets) {
+        if (ticket.getClient() != nullptr) {
+            if (ticket.getClient()->getEmail() == email) {
+                return ticket.getClient();
+            }
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Technician> TicketHelper::verifyTechEmail(const std::vector<Ticket> &tickets, const std::string &email) {
+    for (const auto &ticket : tickets) {
+        if (ticket.getTechnician() != nullptr) {
+            if (ticket.getTechnician()->getEmail() == email) {
+                return ticket.getTechnician();
+            }
+        }
+    }
+    return nullptr;
+}
+
 bool TicketHelper::isFormatValid(const std::string &date) {
     return (date.length() == 10 && ((date[4] == '-') && (date[7] == '-')));
 }
