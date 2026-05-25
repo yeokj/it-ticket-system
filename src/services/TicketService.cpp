@@ -5,6 +5,8 @@
 #include <algorithm>
 
 void TicketService::createTicket(std::vector<Ticket> &tickets) {
+    std::shared_ptr<Client> client;
+    std::shared_ptr<Technician> technician;
     Ticket ticket;
 
     int ticketID = TicketHelper::generateTicket(ticketSet);
@@ -12,34 +14,93 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
         std::cout << "Error: Ticket database is full. Cannot create new ticket.\n";
         return;
     }
-    std::string clientName, technicianName, issueDescription, dueDate;
-
     ticket.setTicketId(ticketID);
     std::cout << "\nTicket number: " << ticketID << std::endl;
 
-    // Input client, technician, and issue information
-    std::cout << "\nWhat is the client's name? ";
-    std::getline(std::cin >> std::ws, clientName);
-    ticket.setClientName(clientName);
+    std::string clientName, clientEmail, clientCompany;
 
-    std::cout << "What is your name? ";
-    std::getline(std::cin >> std::ws, technicianName);
-    ticket.setTechnicianName(technicianName);
+    bool isClientEmailValid = false;
+    while (!isClientEmailValid) {
+        std::cout << "\nEnter the client's email: " << std::endl;
+        std::getline(std::cin >> std::ws, clientEmail);
 
-    std::cout << "What is the issue? ";
-    std::cin >> issueDescription;
+        if (TicketHelper::validateEmail(clientEmail)) {
+            isClientEmailValid = true;
+        }
+        else {
+            std::cout << "Invalid email format. Please try again\n";
+        }
+    }
+
+    client = TicketHelper::verifyClientEmail(tickets, clientEmail);
+
+    if (client != nullptr) {
+        std::cout << "Welcome back " << client->getName() << std::endl;
+        ticket.setClient(client);
+    }
+    else {
+        std::cout << "\nEnter the client's name? ";
+        std::getline(std::cin >> std::ws, clientName);
+
+        std::cout << "\nEnter the client's company: " << std::endl;
+        std::getline(std::cin >> std::ws, clientCompany);
+
+        client = std::make_shared<Client>(nextClientId, clientName, clientEmail, clientCompany);
+        ticket.setClient(client);
+        ++nextClientId;
+    }
+
+    std::string techName, techEmail, techDepartment;
+
+    bool isTechEmailValid = false;
+    while (!isTechEmailValid) {
+        std::cout << "Enter the technician's email: " << std::endl;
+        std::getline(std::cin >> std::ws, techEmail);
+
+        if (TicketHelper::validateEmail(techEmail)) {
+            isTechEmailValid = true;
+        }
+        else {
+            std::cout << "Invalid email format. Please try again\n";
+        }
+    }
+
+    technician = TicketHelper::verifyTechEmail(tickets, techEmail);
+
+    if (technician != nullptr) {
+        std::cout << "Hey " << technician->getName() << ", you got this!" << std::endl;
+        ticket.setTechnician(technician);
+    }
+    else {
+        int techEmplID = 1000 + nextTechId;
+
+        std::cout << "Enter the technician's name? ";
+        std::getline(std::cin >> std::ws, techName);
+
+        std::cout << "Enter the technician's department: " << std::endl;
+        std::getline(std::cin >> std::ws, techDepartment);
+
+        technician = std::make_shared<Technician>(nextTechId, techName, techEmail, techEmplID, techDepartment);
+        ticket.setTechnician(technician);
+        ++nextTechId;
+    }
+
+    std::string issueDescription, dueDate;
+
+    std::cout << "Enter the client's issue? ";
+    std::getline(std::cin >> std::ws, issueDescription);
     ticket.setIssueDescription(issueDescription);
 
     bool isValid = false;
     while (!isValid) {
-        std::cout << "Enter the date of the issue in this format ('YYY-MM-DD'): " << std::endl;
+        std::cout << "Enter the date of the issue in this format ('YYY-MM-DD'): ";
         std::cin >> dueDate;
 
         if (TicketHelper::validateDate(dueDate)) {
             isValid = true;
         }
         else {
-            std::cout << "Invalid entry, please try again" << std::endl;
+            std::cout << "\nInvalid entry, please try again.\n";
         }
     }
     ticket.setDueDate(dueDate);
@@ -50,7 +111,7 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     std::cout << "Auto-assigned priority level: " << ticket.getPriorityLevel() << std::endl;
 
     tickets.push_back(ticket); 
-    std::cout << "\nIncident Added Successfully!" << std::endl;
+    std::cout << "\nTicket Successfully Created!" << std::endl;
 }
 
 void TicketService::removeTicket(std::vector<Ticket> &tickets) {
@@ -190,7 +251,7 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
                 std::string newTechnician;
                 std::cout << "Enter technician's name: ";
                 std::getline(std::cin >> std::ws, newTechnician);
-                tickets[ticketChoice - 1].setTechnicianName(newTechnician);
+                tickets[ticketChoice - 1].setTechnician(newTechnician);
                 done = true;
                 break;
             }

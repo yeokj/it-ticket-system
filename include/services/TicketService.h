@@ -18,8 +18,11 @@ public:
 
     // Organization:
     void organizeTickets(std::vector<Ticket>& tickets); // Sorts/Prioritizes tickets
+
 private:
     std::unordered_set<int> ticketSet;
+    int nextClientId;
+    int nextTechId;
 };
 
 #endif
