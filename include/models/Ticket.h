@@ -2,7 +2,6 @@
 #define TICKET_H
 
 #include "User.h"
-#include <string>
 #include <memory>
 
 // Class to represent a Ticket (created by Kyame)

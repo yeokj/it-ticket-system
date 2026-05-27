@@ -304,6 +304,16 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     std::cout << "Ticket updated successfully\n";
 }
 
+void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
+    if (tickets.empty()) {
+        std::cout << "\nNo tickets logged in the master collection.\n";
+        return;
+    }
+    for (const auto &ticket : tickets) {
+        ticket.display();
+    }
+}
+
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         std::cout << "\nNo tickets available to filter." << std::endl;
