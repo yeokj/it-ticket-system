@@ -206,25 +206,32 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
     }
 
     displayTickets(tickets);
+    Ticket *targetTicket = nullptr;
     int ticketChoice;
 
-    while (true) {
-        std::cout <<"Select a ticket number (1 - " << tickets.size() << "):";
+    bool ticketFound = false;
+    while (!ticketFound) {
+        std::cout <<"Enter the 4-digit ticket ID you wish to update: ";
         std::cin >> ticketChoice;
 
-        if ((ticketChoice >= 1) && (ticketChoice <= tickets.size())) {
-            std::cout << "Updating ticket #" << ticketChoice;
-            break;
+        for (auto &ticket : tickets) {
+            if (ticketChoice == ticket.getTicketId()) {
+                std::cout << "Updating ticket #" << ticketChoice;
+                targetTicket = &ticket;
+                ticketFound = true;
+            }
         }
-        std::cout << "Invalid input, please try again\n";
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
+        if (!ticketFound) {
+            std::cout << "Invalid input, please try again\n";
+            std::cin.clear();
+            std::cin.ignore(1000, '\n');
+        }
     }
 
     bool done = false;
     int statusChoice;
 
-    while (!done) {
+    do {
         std::cout << "\nWhat would you like to update?\n";
         std::cout << "1) Update status to 'In Progress'\n";
         std::cout << "2) Update status to 'On Hold'\n";
@@ -236,22 +243,50 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
 
         switch (statusChoice) {
             case 1:
-                tickets[ticketChoice - 1].setIssueStatus("In Progress");
+                targetTicket->setIssueStatus("In Progress");
                 done = true;
                 break;
             case 2:
-                tickets[ticketChoice - 1].setIssueStatus("On Hold");
+                targetTicket->setIssueStatus("On Hold");
                 done = true;
                 break;
             case 3:
-                tickets[ticketChoice - 1].setIssueStatus("Resolved");
+                targetTicket->setIssueStatus("Resolved");
                 done = true;
                 break;
             case 4: {
-                std::string newTechnician;
-                std::cout << "Enter technician's name: ";
-                std::getline(std::cin >> std::ws, newTechnician);
-                tickets[ticketChoice - 1].setTechnician(newTechnician);
+                std::string techEmail;
+                bool isTechEmailValid = false;
+                while (!isTechEmailValid) {
+                    std::cout << "Enter the technician's email: " << std::endl;
+                    std::getline(std::cin >> std::ws, techEmail);
+
+                    if (TicketHelper::validateEmail(techEmail)) {
+                        isTechEmailValid = true;
+                    }
+                    else {
+                        std::cout << "Invalid email format. Please try again\n";
+                    }
+                }
+                std::shared_ptr<Technician> technician = TicketHelper::verifyTechEmail(tickets, techEmail);
+                if (technician != nullptr) {
+                    std::cout << "Hey " << technician->getName() << ", you got this!" << std::endl;
+                    targetTicket->setTechnician(technician);
+                }
+                else {
+                    std::string techName, techDepartment;
+                    int techEmplID = 1000 + nextTechId;
+
+                    std::cout << "Enter the technician's name? ";
+                    std::getline(std::cin >> std::ws, techName);
+
+                    std::cout << "Enter the technician's department: " << std::endl;
+                    std::getline(std::cin >> std::ws, techDepartment);
+
+                    technician = std::make_shared<Technician>(nextTechId, techName, techEmail, techEmplID, techDepartment);
+                    targetTicket->setTechnician(technician);
+                    ++nextTechId;
+                }
                 done = true;
                 break;
             }
@@ -264,7 +299,8 @@ void TicketService::updateTicket(std::vector<Ticket> &tickets) {
                 std::cin.ignore(1000, '\n');
                 break;
         }
-    }
+    } while (!done);
+
     std::cout << "Ticket updated successfully\n";
 }
 
