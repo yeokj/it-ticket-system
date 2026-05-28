@@ -18,7 +18,7 @@ private:
     std::string clientFile;
     std::string technicianFile;
     std::string ticketFile;
-    std::vector<std::string> parseLine(const std::string &data);
+    std::vector<std::string> parseLine(const std::string &line);
 };
 
 #endif
