@@ -12,33 +12,68 @@ int main () {
     TicketService service;
     StorageManager storage;
 
-    if (storage.loadFiles(tickets)) {
-        service.syncTickets(tickets); 
+    if (!storage.loadFiles(tickets)) {
+        std::cerr << "Failed to load files." << std::endl;
+        return 1;
     }
+    service.syncTickets(tickets);
 
     std::cout << "Welcome to York College Incident Management" << std::endl;
 
-    std::string username, password;
+    std::string loginInput, password, userRole = "";
 
     // Login loop for authentication
     while (true) {
-        std::cout << "Enter Username: ";
-        std::getline(std::cin, username);
+        std::cout << "Enter Username or User ID: ";
+        std::getline(std::cin, loginInput);
         std::cout << "Password: ";
         std::getline(std::cin, password);
 
+        if (loginInput == "Admin") {
+            if (password == "York123") {
+                userRole = "Admin";
+                std::cout << "Login successful as Admin!\n" << std::endl;
+                break;
+            }
+        } 
+        else {
+            try {
+                int userId = std::stoi(loginInput);
 
-        if (username == "Admin" && password == "York123") {
-            std::cout << "Login successful!" << std::endl;
-            break;
-        } else {
-            std::cout << "Username or Password is incorrect! Try again!" << std::endl;
+                const auto& techMap = storage.getTechMap();
+                const auto& clientMap = storage.getClientMap();
+
+                // Check Technicians Map
+                if (techMap.find(userId) != techMap.end()) {
+                    if (password == "Tech" + loginInput) {
+                        userRole = "Technician";
+                        std::cout << "Login successful! Welcome, " << techMap.at(userId)->getName() << ".\n" << std::endl;
+                        break;
+                    }
+                }
+                // Check Clients Map
+                else if (clientMap.find(userId) != clientMap.end()) {
+                    if (password == "Client" + loginInput) {
+                        userRole = "Client";
+                        std::cout << "Login successful! Welcome, " << clientMap.at(userId)->getName() << ".\n" << std::endl;
+                        break;
+                    }
+                }
+            }
+            catch (const std::invalid_argument& e) {
+                std::cerr << "Error: Input must be 'Admin' or a numeric User ID.\n";
+            }
+            catch (const std::out_of_range& e) {
+                std::cerr << "Error: Numeric ID value is too large.\n";
+            }
         }
+        std::cout << "Invalid credentials! Try again.\n" << std::endl;
     }
 
     std::cout << "What can we do for you today?" << std::endl;
 
     int choice;
+    std::string choiceStr;
 
     // Main program loop for menu operations
     while (true){
@@ -51,8 +86,19 @@ int main () {
         std::cout << "5) Display Tickets\n";
         std::cout << "6) Update Ticket Details\n";
         std::cout << "0) Exit\n";
+
         std::cout << "\nEnter your choice: ";
-        std::cin >> choice;
+        std::getline(std::cin, choiceStr);
+
+        try {
+            choice = stoi(choiceStr);
+        }
+        catch (const std::invalid_argument &e) {
+            choice = -1;
+        }
+        catch (const std::out_of_range &e) {
+            choice = -1;
+        }
 
         switch (choice) {
             case 0:
