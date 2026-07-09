@@ -63,8 +63,8 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
     std::ifstream techIn(technicianFile);
     std::ifstream tickIn(ticketFile);
 
-    std::unordered_map<int, std::shared_ptr<Client>> clientMap;
-    std::unordered_map<int, std::shared_ptr<Technician>> techMap;
+    clientMap.clear();
+    techMap.clear();
 
     tickets.clear();
 
@@ -162,4 +162,12 @@ std::vector<std::string> StorageManager::parseLine(const std::string &line) {
         tokens.push_back(token);
     }
     return tokens;
+}
+
+const std::unordered_map<int, std::shared_ptr<Client>> &StorageManager::getClientMap() const { 
+    return clientMap; 
+}
+
+const std::unordered_map<int, std::shared_ptr<Technician>> &StorageManager::getTechMap() const { 
+    return techMap; 
 }
