@@ -1,6 +1,7 @@
 #include "Ticket.h"
 #include "TicketService.h"
 #include "TicketHelper.h"
+#include <iostream>
 #include <stdlib.h>
 #include <algorithm>
 
@@ -342,5 +343,11 @@ void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     }
     else {
         displayTickets(filteredTickets);
+    }
+}
+
+void TicketService::syncTickets(const std::vector<Ticket> &tickets) {
+    for (const auto &ticket : tickets) {
+        ticketSet.insert(ticket.getTicketId());
     }
 }
