@@ -79,12 +79,25 @@ int main () {
     while (true){
         std::cout << "\nIT Ticket Management Menu\n";
         std::cout << "----------------------------------\n";
-        std::cout << "1) Create a Ticket\n"; // Your roadmap merged append into create!
-        std::cout << "2) Remove Ticket\n";
-        std::cout << "3) Organize Tickets\n";
-        std::cout << "4) Find Ticket\n";
-        std::cout << "5) Display Tickets\n";
-        std::cout << "6) Update Ticket Details\n";
+        if (userRole == "Client") {
+            std::cout << "1) Create a Ticket\n";
+            std::cout << "4) Find Ticket\n";
+            std::cout << "5) Display My Tickets\n";
+        } 
+        else if (userRole == "Technician") {
+            std::cout << "3) Organize Tickets\n";
+            std::cout << "4) Find Ticket\n";
+            std::cout << "5) Display Tickets\n";
+            std::cout << "6) Update Ticket Details\n";
+        } 
+        else if (userRole == "Admin") {
+            std::cout << "1) Create a Ticket\n";
+            std::cout << "2) Remove Ticket\n";
+            std::cout << "3) Organize Tickets\n";
+            std::cout << "4) Find Ticket\n";
+            std::cout << "5) Display Tickets\n";
+            std::cout << "6) Update Ticket Details\n";
+        }
         std::cout << "0) Exit\n";
 
         std::cout << "\nEnter your choice: ";
@@ -106,12 +119,24 @@ int main () {
                 storage.saveFiles(tickets);
                 return 0;
             case 1:
+                if (userRole == "Technician") {
+                        std::cerr << "Access Denied: Technicians are not authorized to create tickets.\n";
+                        break;
+                    }
                 service.createTicket(tickets);
                 break;
             case 2:
+                if (userRole != "Admin") {
+                    std::cerr << "Access Denied: Only Administrators are authorized to remove tickets.\n";
+                    break;
+                }
                 service.removeTicket(tickets);
                 break;
             case 3:
+                if (userRole == "Client") {
+                    std::cerr << "Access Denied: Clients are not authorized to organize global tickets.\n";
+                    break;
+                }
                 service.organizeTickets(tickets);
                 break;
             case 4:
@@ -121,6 +146,10 @@ int main () {
                 service.displayTickets(tickets);
                 break;
             case 6:
+                if (userRole == "Client") {
+                    std::cerr << "Access Denied: Clients are not authorized to modify ticket details.\n";
+                    break;
+                }
                 service.updateTicket(tickets);
                 break;
             default:
