@@ -22,7 +22,7 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
 
     bool isClientEmailValid = false;
     while (!isClientEmailValid) {
-        std::cout << "\nEnter the client's email: " << std::endl;
+        std::cout << "\nEnter the client's email: ";
         std::getline(std::cin >> std::ws, clientEmail);
 
         if (TicketHelper::validateEmail(clientEmail)) {
@@ -40,10 +40,10 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
         ticket.setClient(client);
     }
     else {
-        std::cout << "\nEnter the client's name? ";
+        std::cout << "\nEnter the client's name: ";
         std::getline(std::cin >> std::ws, clientName);
 
-        std::cout << "\nEnter the client's company: " << std::endl;
+        std::cout << "\nEnter the client's company: ";
         std::getline(std::cin >> std::ws, clientCompany);
 
         client = std::make_shared<Client>(nextClientId, clientName, clientEmail, clientCompany);
@@ -55,7 +55,7 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
 
     bool isTechEmailValid = false;
     while (!isTechEmailValid) {
-        std::cout << "Enter the technician's email: " << std::endl;
+        std::cout << "\nEnter the technician's email: ";
         std::getline(std::cin >> std::ws, techEmail);
 
         if (TicketHelper::validateEmail(techEmail)) {
@@ -75,10 +75,10 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     else {
         int techEmplID = 1000 + nextTechId;
 
-        std::cout << "Enter the technician's name? ";
+        std::cout << "\nEnter the technician's name: ";
         std::getline(std::cin >> std::ws, techName);
 
-        std::cout << "Enter the technician's department: " << std::endl;
+        std::cout << "\nEnter the technician's department: ";
         std::getline(std::cin >> std::ws, techDepartment);
 
         technician = std::make_shared<Technician>(nextTechId, techName, techEmail, techEmplID, techDepartment);
@@ -88,13 +88,13 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
 
     std::string issueDescription, dueDate;
 
-    std::cout << "Enter the client's issue? ";
+    std::cout << "\nEnter the client's issue? ";
     std::getline(std::cin >> std::ws, issueDescription);
     ticket.setIssueDescription(issueDescription);
 
     bool isValid = false;
     while (!isValid) {
-        std::cout << "Enter the date of the issue in this format ('YYY-MM-DD'): ";
+        std::cout << "\nEnter the date of the issue in this format ('YYY-MM-DD'): ";
         std::cin >> dueDate;
 
         if (TicketHelper::validateDate(dueDate)) {
@@ -109,7 +109,7 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     int p = TicketHelper::calculatePriority(dueDate);
     ticket.setPriorityLevel(p);
 
-    std::cout << "Auto-assigned priority level: " << ticket.getPriorityLevel() << std::endl;
+    std::cout << "\nAuto-assigned priority level: " << ticket.getPriorityLevel() << std::endl;
 
     tickets.push_back(ticket); 
     std::cout << "\nTicket Successfully Created!" << std::endl;
