@@ -1,2 +1,19 @@
+# IDE and Tooling Configs
 .vscode
 .idea
+
+# Build Outputs and Cache
+/build
+*.o
+*.out
+*.exe
+
+# Local Data Database States
+*.csv
+
+# OS-specific Trash Files
+.DS_Store
+
+CMakeCache.txt
+CMakeFiles/
+CMakeSettings.json
