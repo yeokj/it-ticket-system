@@ -58,7 +58,70 @@ bool StorageManager::saveFiles(const std::vector<Ticket> &tickets) {
 }
 
 bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
+    std::ifstream clientIn(clientFile);
+    std::ifstream techIn(technicianFile);
+    std::ifstream tickIn(ticketFile);
+
+    std::unordered_map<int, std::shared_ptr<Client>> clientMap;
+    std::unordered_map<int, std::shared_ptr<Technician>> techMap;
+
+    tickets.clear();
+
+    if (!clientIn.is_open() && !techIn.is_open() && !tickIn.is_open()) {
+        return true;
+    }
+    if (!clientIn.is_open() || !techIn.is_open() || !tickIn.is_open()) {
+        return false;
+    }
+
+    std::string line;
+    while (std::getline(clientIn, line)) {
+        auto tokens = parseLine(line);
+        if (tokens.size() < 4) continue;
+
+        auto client = std::make_shared<Client>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3]);
+        clientMap[client->getID()] = client;
+    }
     
+    while (std::getline(techIn, line)) {
+        auto tokens = parseLine(line);
+        if (tokens.size() < 5) continue;
+
+        auto technician = std::make_shared<Technician>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3], tokens[4]);
+        techMap[technician->getID()] = technician;
+    }
+
+    while (std::getline(tickIn, line)) {
+        auto tokens = parseLine(line);
+        if (tokens.size() < 7) continue;
+
+        int ticketID = std::stoi(tokens[0]), clientID = std::stoi(tokens[1]), techID = std::stoi(tokens[2]);
+        auto clientPtr = clientMap[clientID];
+
+        std::shared_ptr<Technician> techPtr = nullptr;
+        if (techID != 0) {
+            techPtr = techMap[techID];
+        }
+
+        std::string issueDescription = tokens[3], dueDate = tokens[4], issueStatus = tokens[6];
+        int priorityLevel = stoi(tokens[5]);
+        
+        Ticket ticket;
+        ticket.setTicketId(ticketID);
+        ticket.setClient(clientPtr);
+        ticket.setTechnician(techPtr);
+        ticket.setIssueDescription(issueDescription);
+        ticket.setDueDate(dueDate);
+        ticket.setPriorityLevel(priorityLevel);
+        ticket.setIssueStatus(issueStatus);
+
+        tickets.push_back(ticket);
+    }
+    clientIn.close();
+    techIn.close();
+    tickIn.close();
+
+    return true;
 }
 
 std::vector<std::string> StorageManager::parseLine(const std::string &line) {
