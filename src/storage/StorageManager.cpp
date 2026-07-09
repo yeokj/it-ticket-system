@@ -1,4 +1,5 @@
 #include "StorageManager.h"
+#include <iostream>
 #include <sstream>
 #include <unordered_set>
 
@@ -79,43 +80,71 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
         auto tokens = parseLine(line);
         if (tokens.size() < 4) continue;
 
-        auto client = std::make_shared<Client>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3]);
-        clientMap[client->getID()] = client;
+        try {
+            auto client = std::make_shared<Client>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3]);
+            clientMap[client->getID()] = client;
+        }
+        catch (const std::invalid_argument &e) {
+            std::cerr << "Error: Corrupted token found where a number was expected. Skipping row.\n";
+        }
+        catch (const std::out_of_range &e) {
+            std::cerr << "Error: Numeric value exceeds integer size limit. Skipping row.\n";
+        }
     }
     
     while (std::getline(techIn, line)) {
         auto tokens = parseLine(line);
         if (tokens.size() < 5) continue;
-
-        auto technician = std::make_shared<Technician>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3], tokens[4]);
-        techMap[technician->getID()] = technician;
+        try {
+            auto technician = std::make_shared<Technician>(std::stoi(tokens[0]), tokens[1], tokens[2], stoi(tokens[3]), tokens[4]);
+            techMap[technician->getID()] = technician;
+        }
+        catch (const std::invalid_argument &e) {
+            std::cerr << "Error: Corrupted token found where a number was expected. Skipping row.\n";
+        }
+        catch (const std::out_of_range &e) {
+            std::cerr << "Error: Numeric value exceeds integer size limit. Skipping row.\n";
+        }
     }
 
     while (std::getline(tickIn, line)) {
         auto tokens = parseLine(line);
         if (tokens.size() < 7) continue;
-
-        int ticketID = std::stoi(tokens[0]), clientID = std::stoi(tokens[1]), techID = std::stoi(tokens[2]);
-        auto clientPtr = clientMap[clientID];
-
-        std::shared_ptr<Technician> techPtr = nullptr;
-        if (techID != 0) {
-            techPtr = techMap[techID];
-        }
-
-        std::string issueDescription = tokens[3], dueDate = tokens[4], issueStatus = tokens[6];
-        int priorityLevel = stoi(tokens[5]);
         
-        Ticket ticket;
-        ticket.setTicketId(ticketID);
-        ticket.setClient(clientPtr);
-        ticket.setTechnician(techPtr);
-        ticket.setIssueDescription(issueDescription);
-        ticket.setDueDate(dueDate);
-        ticket.setPriorityLevel(priorityLevel);
-        ticket.setIssueStatus(issueStatus);
+        try {
+            int ticketID = std::stoi(tokens[0]), clientID = std::stoi(tokens[1]), techID = std::stoi(tokens[2]);
 
-        tickets.push_back(ticket);
+            auto clientPtr = clientMap[clientID];
+            if (!clientPtr) {
+                std::cerr << "Warning: Skipping ticket ID " << ticketID << " because Client ID " << clientID << " does not exist.\n";
+                continue; 
+            }
+
+            std::shared_ptr<Technician> techPtr = nullptr;
+            if (techID != 0) {
+                techPtr = techMap[techID];
+            }
+
+            std::string issueDescription = tokens[3], dueDate = tokens[4], issueStatus = tokens[6];
+            int priorityLevel = stoi(tokens[5]);
+            
+            Ticket ticket;
+            ticket.setTicketId(ticketID);
+            ticket.setClient(clientPtr);
+            ticket.setTechnician(techPtr);
+            ticket.setIssueDescription(issueDescription);
+            ticket.setDueDate(dueDate);
+            ticket.setPriorityLevel(priorityLevel);
+            ticket.setIssueStatus(issueStatus);
+
+            tickets.push_back(ticket);
+        }
+        catch (const std::invalid_argument &e) {
+            std::cerr << "Error: Corrupted token found where a number was expected. Skipping row.\n";
+        }
+        catch (const std::out_of_range &e) {
+            std::cerr << "Error: Numeric value exceeds integer size limit. Skipping row.\n";
+        }
     }
     clientIn.close();
     techIn.close();
