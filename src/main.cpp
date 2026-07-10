@@ -21,6 +21,7 @@ int main () {
     std::cout << "Welcome to York College Incident Management" << std::endl;
 
     std::string loginInput, password, userRole = "";
+    int currentUserId = -1;
 
     // Login loop for authentication
     while (true) {
@@ -47,6 +48,7 @@ int main () {
                 if (techMap.find(userId) != techMap.end()) {
                     if (password == "Tech" + loginInput) {
                         userRole = "Technician";
+                        currentUserId = userId;
                         std::cout << "Login successful! Welcome, " << techMap.at(userId)->getName() << ".\n" << std::endl;
                         break;
                     }
@@ -55,6 +57,7 @@ int main () {
                 else if (clientMap.find(userId) != clientMap.end()) {
                     if (password == "Client" + loginInput) {
                         userRole = "Client";
+                        currentUserId = userId;
                         std::cout << "Login successful! Welcome, " << clientMap.at(userId)->getName() << ".\n" << std::endl;
                         break;
                     }
@@ -115,7 +118,7 @@ int main () {
 
         switch (choice) {
             case 0:
-                std::cout << "Saving files and exiting program. Thank you!\n";
+                std::cout << "\nSaving files and exiting program. Thank you!";
                 storage.saveFiles(tickets);
                 return 0;
             case 1:
@@ -140,10 +143,10 @@ int main () {
                 service.organizeTickets(tickets);
                 break;
             case 4:
-                service.findTickets(tickets);
+                service.findTickets(tickets, userRole, currentUserId);
                 break;
             case 5:
-                service.displayTickets(tickets);
+                service.displayTickets(tickets, userRole, currentUserId);
                 break;
             case 6:
                 if (userRole == "Client") {

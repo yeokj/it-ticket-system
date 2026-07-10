@@ -315,6 +315,31 @@ void TicketService::displayTickets(const std::vector<Ticket> &tickets) {
     }
 }
 
+void TicketService::displayTickets(const std::vector<Ticket> &tickets, const std::string &userRole, int currentUserId) {
+    if (tickets.empty()) {
+        std::cout << "No tickets found in the system.\n";
+        return;
+    }
+
+    if (userRole == "Admin" || userRole == "Technician") {
+        displayTickets(tickets); // Calls the original version above cleanly
+        return;
+    }
+
+    std::cout << "\n=== Your Submitted Incident Tickets ===\n";
+    bool foundAny = false;
+    for (const auto& ticket : tickets) {
+        if (ticket.getClient() && ticket.getClient()->getID() == currentUserId) {
+            ticket.display();
+            foundAny = true;
+        }
+    }
+
+    if (!foundAny) {
+        std::cout << "You currently have no submitted tickets.\n";
+    }
+}
+
 void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     if (tickets.empty()) {
         std::cout << "\nNo tickets available to filter." << std::endl;
@@ -343,6 +368,37 @@ void TicketService::findTickets(const std::vector<Ticket> &tickets) {
     }
     else {
         displayTickets(filteredTickets);
+    }
+}
+
+void TicketService::findTickets(const std::vector<Ticket>& tickets, const std::string &userRole, int currentUserId) {
+    if (tickets.empty()) {
+        std::cout << "No tickets found in the system.\n";
+        return;
+    }
+
+    if (userRole == "Admin" || userRole == "Technician") {
+        findTickets(tickets);
+        return;
+    }
+
+    std::cout << "\n=== Search Your Submitted Tickets ===\n";
+    std::string searchKeyword;
+    std::cout << "Enter a keyword to search within your issue descriptions: ";
+    std::getline(std::cin, searchKeyword);
+
+    bool foundAny = false;
+    for (const auto& ticket : tickets) {
+        if (ticket.getClient() && ticket.getClient()->getID() == currentUserId) {
+            if (ticket.getIssueDescription().find(searchKeyword) != std::string::npos) {
+                ticket.display();
+                foundAny = true;
+            }
+        }
+    }
+
+    if (!foundAny) {
+        std::cout << "No matching tickets found matching '" << searchKeyword << "' in your repository.\n";
     }
 }
 

@@ -13,8 +13,11 @@ public:
     void updateTicket(std::vector<Ticket>& tickets); // Updates ticket in the ticket vector
 
     // View Operations:
-    void displayTickets(const std::vector<Ticket>& tickets); // Displays all tickets       
-    void findTickets(const std::vector<Ticket>& tickets); // Returns tickets based on priority, status, etc
+    void displayTickets(const std::vector<Ticket>& tickets);
+    void displayTickets(const std::vector<Ticket>& tickets, const std::string &userRole, int currentUserId); // Displays all tickets
+    
+    void findTickets(const std::vector<Ticket>& tickets);
+    void findTickets(const std::vector<Ticket>& tickets, const std::string &userRole, int currentUserId); // Returns tickets based on priority, status, etc
 
     // Organization:
     void organizeTickets(std::vector<Ticket>& tickets); // Sorts/Prioritizes tickets
