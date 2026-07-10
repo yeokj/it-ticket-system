@@ -109,7 +109,7 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
 
     while (std::getline(tickIn, line)) {
         auto tokens = parseLine(line);
-        if (tokens.size() < 7) continue;
+        if (tokens.size() < 6) continue;
         
         try {
             int ticketID = std::stoi(tokens[0]), clientID = std::stoi(tokens[1]), techID = std::stoi(tokens[2]);
@@ -125,8 +125,13 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
                 techPtr = techMap[techID];
             }
 
-            std::string issueDescription = tokens[3], dueDate = tokens[4], issueStatus = tokens[6];
+            std::string issueDescription = tokens[3], dueDate = tokens[4];
             int priorityLevel = stoi(tokens[5]);
+
+            std::string issueStatus = "Open";
+            if (tokens.size() >= 7) {
+                issueStatus = tokens[6];
+            }
             
             Ticket ticket;
             ticket.setTicketId(ticketID);
