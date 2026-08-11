@@ -22,4 +22,5 @@ target_include_directories(ticket_system PRIVATE
     include/services
     include/utils
     include/storage
+    include/factories
 )
