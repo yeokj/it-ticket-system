@@ -12,6 +12,7 @@ set(SOURCES
     src/services/TicketService.cpp
     src/storage/StorageManager.cpp
     src/utils/TicketHelper.cpp
+    src/factories/UserFactory.cpp
 )
 
 add_executable(ticket_system ${SOURCES})
