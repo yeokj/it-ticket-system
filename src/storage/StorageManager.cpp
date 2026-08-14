@@ -1,4 +1,5 @@
 #include "StorageManager.h"
+#include "UserFactory.h"
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
@@ -78,32 +79,21 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
     std::string line;
     while (std::getline(clientIn, line)) {
         auto tokens = parseLine(line);
-        if (tokens.size() < 4) continue;
+        std::shared_ptr<User> user = UserFactory::createUser("Client", tokens);
+        std::shared_ptr<Client> client = std::dynamic_pointer_cast<Client>(user);
 
-        try {
-            auto client = std::make_shared<Client>(std::stoi(tokens[0]), tokens[1], tokens[2], tokens[3]);
+        if (client != nullptr) {
             clientMap[client->getID()] = client;
-        }
-        catch (const std::invalid_argument &e) {
-            std::cerr << "Error: Corrupted token found where a number was expected. Skipping row.\n";
-        }
-        catch (const std::out_of_range &e) {
-            std::cerr << "Error: Numeric value exceeds integer size limit. Skipping row.\n";
         }
     }
     
     while (std::getline(techIn, line)) {
         auto tokens = parseLine(line);
-        if (tokens.size() < 5) continue;
-        try {
-            auto technician = std::make_shared<Technician>(std::stoi(tokens[0]), tokens[1], tokens[2], stoi(tokens[3]), tokens[4]);
+        std::shared_ptr<User> user = UserFactory::createUser("Technician", tokens);
+        std::shared_ptr<Technician> technician = std::dynamic_pointer_cast<Technician>(user);
+
+        if (technician != nullptr) {
             techMap[technician->getID()] = technician;
-        }
-        catch (const std::invalid_argument &e) {
-            std::cerr << "Error: Corrupted token found where a number was expected. Skipping row.\n";
-        }
-        catch (const std::out_of_range &e) {
-            std::cerr << "Error: Numeric value exceeds integer size limit. Skipping row.\n";
         }
     }
 
