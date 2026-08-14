@@ -12,6 +12,7 @@ set(SOURCES
     src/services/TicketService.cpp
     src/storage/StorageManager.cpp
     src/utils/TicketHelper.cpp
+    src/utils/Exceptions.cpp
     src/factories/UserFactory.cpp
 )
 
