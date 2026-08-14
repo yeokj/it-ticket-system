@@ -1,5 +1,6 @@
 #include "StorageManager.h"
 #include "UserFactory.h"
+#include "Exceptions.h"
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
@@ -79,21 +80,31 @@ bool StorageManager::loadFiles(std::vector<Ticket> &tickets) {
     std::string line;
     while (std::getline(clientIn, line)) {
         auto tokens = parseLine(line);
-        std::shared_ptr<User> user = UserFactory::createUser("Client", tokens);
-        std::shared_ptr<Client> client = std::dynamic_pointer_cast<Client>(user);
+        try {
+            std::shared_ptr<User> user = UserFactory::createUser("Client", tokens);
+            std::shared_ptr<Client> client = std::dynamic_pointer_cast<Client>(user);
 
-        if (client != nullptr) {
-            clientMap[client->getID()] = client;
+            if (client != nullptr) {
+                clientMap[client->getID()] = client;
+            }
+        }
+        catch (const DatabaseCorruptedException &e) {
+            std::cerr << "Error loading user record: " << e.what() << "\n";
         }
     }
     
     while (std::getline(techIn, line)) {
         auto tokens = parseLine(line);
-        std::shared_ptr<User> user = UserFactory::createUser("Technician", tokens);
-        std::shared_ptr<Technician> technician = std::dynamic_pointer_cast<Technician>(user);
+        try {
+            std::shared_ptr<User> user = UserFactory::createUser("Technician", tokens);
+            std::shared_ptr<Technician> technician = std::dynamic_pointer_cast<Technician>(user);
 
-        if (technician != nullptr) {
-            techMap[technician->getID()] = technician;
+            if (technician != nullptr) {
+                techMap[technician->getID()] = technician;
+            }
+        }
+        catch (const DatabaseCorruptedException &e) {
+            std::cerr << "Error loading user record: " << e.what() << "\n";
         }
     }
 
