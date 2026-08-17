@@ -1,6 +1,7 @@
 #include "Ticket.h"
 #include "TicketService.h"
 #include "StorageManager.h"
+#include "Exceptions.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -115,48 +116,40 @@ int main () {
         catch (const std::out_of_range &e) {
             choice = -1;
         }
-
-        switch (choice) {
-            case 0:
-                std::cout << "\nSaving files and exiting program. Thank you!";
-                storage.saveFiles(tickets);
-                return 0;
-            case 1:
-                if (userRole == "Technician") {
-                        std::cerr << "Access Denied: Technicians are not authorized to create tickets.\n";
-                        break;
-                    }
-                service.createTicket(tickets);
-                break;
-            case 2:
-                if (userRole != "Admin") {
-                    std::cerr << "Access Denied: Only Administrators are authorized to remove tickets.\n";
+        try {
+            switch (choice) {
+                case 0:
+                    std::cout << "\nSaving files and exiting program. Thank you!";
+                    storage.saveFiles(tickets);
+                    return 0;
+                case 1:
+                    if (userRole == "Technician") {
+                            throw UnauthorizedAccessException("Technicians are not authorized to create tickets.\n");
+                            break;
+                        }
+                    service.createTicket(tickets);
                     break;
-                }
-                service.removeTicket(tickets);
-                break;
-            case 3:
-                if (userRole == "Client") {
-                    std::cerr << "Access Denied: Clients are not authorized to organize global tickets.\n";
+                case 2:
+                    service.removeTicket(tickets, userRole);
                     break;
-                }
-                service.organizeTickets(tickets);
-                break;
-            case 4:
-                service.findTickets(tickets, userRole, currentUserId);
-                break;
-            case 5:
-                service.displayTickets(tickets, userRole, currentUserId);
-                break;
-            case 6:
-                if (userRole == "Client") {
-                    std::cerr << "Access Denied: Clients are not authorized to modify ticket details.\n";
+                case 3:
+                    service.organizeTickets(tickets, userRole);
                     break;
-                }
-                service.updateTicket(tickets);
-                break;
-            default:
-                std::cout << "Invalid choice. Please try again.\n";
+                case 4:
+                    service.findTickets(tickets, userRole, currentUserId);
+                    break;
+                case 5:
+                    service.displayTickets(tickets, userRole, currentUserId);
+                    break;
+                case 6:
+                    service.updateTicket(tickets, userRole);
+                    break;
+                default:
+                    std::cout << "Invalid choice. Please try again.\n";
+            }
+        }
+        catch (const UnauthorizedAccessException &e) {
+            std::cerr << "\n[Access Denied] " << e.what() << "\n";
         }
     }
 

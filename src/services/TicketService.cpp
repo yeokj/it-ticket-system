@@ -115,10 +115,14 @@ void TicketService::createTicket(std::vector<Ticket> &tickets) {
     std::cout << "\nTicket Successfully Created!" << std::endl;
 }
 
-void TicketService::removeTicket(std::vector<Ticket> &tickets) {
+void TicketService::removeTicket(std::vector<Ticket> &tickets, const std::string &userRole) {
     if (tickets.empty()) {
         std::cout << "\nNo tickets to delete." << std::endl;
         return;
+    }
+
+    if (userRole != "Admin") { 
+        throw UnauthorizedAccessException("Permission Denied: Only Admin users can remove tickets.");
     }
 
     displayTickets(tickets);
@@ -147,10 +151,14 @@ void TicketService::removeTicket(std::vector<Ticket> &tickets) {
     }
 }
 
-void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
+void TicketService::organizeTickets(std::vector<Ticket> &tickets, const std::string &userRole) {
     if (tickets.empty()) {
         std::cout << "\nNo tickets to sort." << std::endl;
         return;
+    }
+
+    if (userRole == "Client") { 
+        throw UnauthorizedAccessException("Permission Denied: Clients cannot reorder or organize global ticket queues.");
     }
 
     std::vector<Ticket> tempTickets = tickets;
@@ -200,10 +208,14 @@ void TicketService::organizeTickets(std::vector<Ticket> &tickets) {
     }
 }
 
-void TicketService::updateTicket(std::vector<Ticket> &tickets) {
+void TicketService::updateTicket(std::vector<Ticket> &tickets, const std::string &userRole) {
     if (tickets.empty()) {
         std::cout << "\nNo tickets to update." << std::endl;
         return;
+    }
+
+    if (userRole != "Admin" && userRole != "Technician") {
+        throw UnauthorizedAccessException("Permission Denied: Unauthorized role attempted to modify ticket details.");
     }
 
     displayTickets(tickets);
